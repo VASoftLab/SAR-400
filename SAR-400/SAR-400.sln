@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28307.329
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CostumeController", "CostumeController\CostumeController.csproj", "{FB15462E-23C3-4396-93D6-36E05821D5AF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControllerTest", "ControllerTest\ControllerTest.csproj", "{16F37E09-1CBA-44B6-AC6E-205B6BBF7FEB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{FB15462E-23C3-4396-93D6-36E05821D5AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FB15462E-23C3-4396-93D6-36E05821D5AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FB15462E-23C3-4396-93D6-36E05821D5AF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{16F37E09-1CBA-44B6-AC6E-205B6BBF7FEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{16F37E09-1CBA-44B6-AC6E-205B6BBF7FEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{16F37E09-1CBA-44B6-AC6E-205B6BBF7FEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{16F37E09-1CBA-44B6-AC6E-205B6BBF7FEB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

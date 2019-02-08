@@ -1,0 +1,10 @@
+D:\Larionenko\GitHub\SAR-400\SAR-400\ControllerTest\bin\Debug\ControllerTest.exe.config
+D:\Larionenko\GitHub\SAR-400\SAR-400\ControllerTest\bin\Debug\ControllerTest.exe
+D:\Larionenko\GitHub\SAR-400\SAR-400\ControllerTest\bin\Debug\ControllerTest.pdb
+D:\Larionenko\GitHub\SAR-400\SAR-400\ControllerTest\obj\Debug\ControllerTest.csprojAssemblyReference.cache
+D:\Larionenko\GitHub\SAR-400\SAR-400\ControllerTest\obj\Debug\ControllerTest.csproj.CoreCompileInputs.cache
+D:\Larionenko\GitHub\SAR-400\SAR-400\ControllerTest\obj\Debug\ControllerTest.exe
+D:\Larionenko\GitHub\SAR-400\SAR-400\ControllerTest\obj\Debug\ControllerTest.pdb
+D:\Larionenko\GitHub\SAR-400\SAR-400\ControllerTest\bin\Debug\CostumeController.dll
+D:\Larionenko\GitHub\SAR-400\SAR-400\ControllerTest\bin\Debug\CostumeController.pdb
+D:\Larionenko\GitHub\SAR-400\SAR-400\ControllerTest\obj\Debug\ControllerTest.csproj.CopyComplete
