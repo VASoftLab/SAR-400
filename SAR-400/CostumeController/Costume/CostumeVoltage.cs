@@ -9,14 +9,12 @@ namespace CostumeController
     public class CostumeVoltage
     {
         public float Value { get; private set; }
-        public PackedData Raw { get { return _raw; } }
+        public PackedData Raw { get; } = new PackedData();
         public float valueScaler = 1;
-
-        private PackedData _raw = new PackedData();
 
         public void Update()
         {
-            Value = _raw.Value * valueScaler;
+            Value = Raw.Value * valueScaler;
         }
     }
 }

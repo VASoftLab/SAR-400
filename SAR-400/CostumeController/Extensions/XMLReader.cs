@@ -7,7 +7,7 @@ using System.Xml.Linq;
 
 namespace CostumeController
 {
-    public static class ATHelperXML
+    public static class XMLReader
     {
         public static XElement[] XElementsByName(XDocument doc, string name)
         {

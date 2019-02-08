@@ -47,7 +47,7 @@ namespace CostumeController
         }
 
         public Quaternion Rotation { get; private set; }
-        public CostumeVoltage Voltage { get { return _voltage; } }
+        public CostumeVoltage Voltage { get; } = new CostumeVoltage();
         #endregion
 
         protected Encoding idEncoding = ASCIIEncoding.ASCII;
@@ -60,8 +60,6 @@ namespace CostumeController
         private int _pps;
 
         private List<CostumeJoint> _joints = new List<CostumeJoint>();
-        private CostumeVoltage _voltage = new CostumeVoltage();
-
         private EventWaitHandle exchangeDone = new EventWaitHandle(false, EventResetMode.AutoReset);
         #endregion
 
@@ -80,26 +78,26 @@ namespace CostumeController
 
             try
             {
-                var element = ATHelperXML.XElementByName(xDoc, "costume");
+                var element = XMLReader.XElementByName(xDoc, "costume");
 
                 if (element == null)
                     return;
 
-                ID = ATHelperXML.XElementAttributeValueByName(element, "id");
-                _ip = ATHelperXML.XElementAttributeValueByName(element, "ip");
+                ID = XMLReader.XElementAttributeValueByName(element, "id");
+                _ip = XMLReader.XElementAttributeValueByName(element, "ip");
 
-                int.TryParse(ATHelperXML.XElementAttributeValueByName(element, "port"), out _port);
-                int.TryParse(ATHelperXML.XElementAttributeValueByName(element, "pps"), out _pps);
+                int.TryParse(XMLReader.XElementAttributeValueByName(element, "port"), out _port);
+                int.TryParse(XMLReader.XElementAttributeValueByName(element, "pps"), out _pps);
 
                 float ofs = 0;
-                RawLoad(ATHelperXML.XElementByName(xDoc, "voltage"), _voltage.Raw, ref _voltage.valueScaler, ref ofs);
+                RawLoad(XMLReader.XElementByName(xDoc, "voltage"), Voltage.Raw, ref Voltage.valueScaler, ref ofs);
 
-                element = ATHelperXML.XElementByName(xDoc, "joints");
+                element = XMLReader.XElementByName(xDoc, "joints");
                 if (element != null)
                 {
-                    foreach (var item in ATHelperXML.XElementsByName(element, "joint"))
+                    foreach (var item in XMLReader.XElementsByName(element, "joint"))
                     {
-                        var joint = new CostumeJoint() { Name = ATHelperXML.XElementAttributeValueByName(item, "name"), };
+                        var joint = new CostumeJoint() { Name = XMLReader.XElementAttributeValueByName(item, "name"), };
 
                         RawLoad(item, joint.Raw, ref joint.valueScaler, ref joint.rawValueOffset);
                         _joints.Add(joint);
@@ -129,14 +127,14 @@ namespace CostumeController
             if (element == null)
                 return;
 
-            scaler = Utility.ConvertToFloat(ATHelperXML.XElementAttributeValueByName(element, "scaler"));
-            var item = ATHelperXML.XElementByName(element, "raw");
+            scaler = Utility.ConvertToFloat(XMLReader.XElementAttributeValueByName(element, "scaler"));
+            var item = XMLReader.XElementByName(element, "raw");
             if (item == null)
                 return;
 
-            offset = Utility.ConvertToFloat(ATHelperXML.XElementAttributeValueByName(item, "offset"));
-            int.TryParse(ATHelperXML.XElementAttributeValueByName(item, "index"), out pack.index);
-            switch (ATHelperXML.XElementAttributeValueByName(item, "type"))
+            offset = Utility.ConvertToFloat(XMLReader.XElementAttributeValueByName(item, "offset"));
+            int.TryParse(XMLReader.XElementAttributeValueByName(item, "index"), out pack.index);
+            switch (XMLReader.XElementAttributeValueByName(item, "type"))
             {
                 case "_byte": pack.type = DataType._byte; break;
                 case "_int16": pack.type = DataType._int16; break;
@@ -249,8 +247,8 @@ namespace CostumeController
             }
 
             // Update voltage value
-            _voltage.Raw.ReadValue(buffer);
-            _voltage.Update();
+            Voltage.Raw.ReadValue(buffer);
+            Voltage.Update();
         }
     }
 }

@@ -41,15 +41,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Costume.cs" />
-    <Compile Include="CostumeJoint.cs" />
-    <Compile Include="CostumeVoltage.cs" />
-    <Compile Include="Helper.cs" />
-    <Compile Include="PackedData.cs" />
+    <Compile Include="Costume\Costume.cs" />
+    <Compile Include="Costume\CostumeJoint.cs" />
+    <Compile Include="Costume\CostumeVoltage.cs" />
+    <Compile Include="Extensions\XMLReader.cs" />
+    <Compile Include="Costume\PackedData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Quaternion.cs" />
-    <Compile Include="Utility.cs" />
-    <Compile Include="Vector3.cs" />
+    <Compile Include="BasicClasses\Quaternion.cs" />
+    <Compile Include="Extensions\Utility.cs" />
+    <Compile Include="BasicClasses\Vector3.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
