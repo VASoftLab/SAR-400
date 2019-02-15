@@ -19,7 +19,13 @@ namespace CostumeController
         #region Публичные переменные
         public string ID { get; private set; }
         public bool Initialized { get; private set; }
-
+        public List<CostumeJoint> Joints
+        {
+            get
+            {
+                return _joints;
+            }
+        }
         /// <summary>
         /// Количество пакетов данных с робота, принимаемых в секунду.
         /// </summary>

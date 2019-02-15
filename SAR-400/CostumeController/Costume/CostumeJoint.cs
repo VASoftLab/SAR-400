@@ -17,7 +17,7 @@ namespace CostumeController
 
         public void Update()
         {
-            Value = Raw.Value + rawValueOffset * valueScaler;
+            Value = (Raw.Value + rawValueOffset) * valueScaler;
         }
     }
 }
