@@ -13,7 +13,7 @@
         </Grid.RowDefinitions>
         <Label Grid.Row="0" x:Name="LabelName" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Двигатель, град."
                Padding="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="18"/>
-        <TextBox Grid.Row="1" x:Name="TextBoxValue" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="5"
+        <TextBox Grid.Row="1" x:Name="TextBoxValue" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="5"
                  FontSize="18"/>
     </Grid>
 </UserControl>

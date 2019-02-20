@@ -20,28 +20,49 @@ namespace CostumeRecorder.UserControls
     /// </summary>
     public partial class JointDisplay : UserControl
     {
+        public string JointName
+        {
+            get
+            {
+                return _jointName;
+            }
+            set
+            {
+                _jointName = value;
+                try
+                {
+                    Dispatcher.Invoke(() => LabelName.Content = _jointName);
+                }
+                catch
+                {
+                    // TODO: Ошибка отмена задачи (?)
+                }
+            }
+        }
         public string Value
         {
+            get
+            {
+                return _value;
+            }
             set
             {
                 _value = value;
                 try
                 {
-                    Dispatcher.Invoke(() => TextBoxValue.Text = _value);
+                    Dispatcher.Invoke(() => TextBoxValue.Text = $"{_value}°");
                 }
                 catch
                 {
-                    Dispatcher.Invoke(() => TextBoxValue.Text = _value);
+                    
                 }
                 
             }
-            get
-            {
-                return _value;
-            }
         }
 
+        private string _jointName;
         private string _value;
+        
         public JointDisplay()
         {
             InitializeComponent();
