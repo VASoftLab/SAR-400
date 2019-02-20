@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:CostumeRecorder"
         xmlns:uc="clr-namespace:CostumeRecorder.UserControls"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="1000">
+        Title="MainWindow" Height="600" Width="1000" Loaded="Window_Loaded">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="0.8*"/>
@@ -18,7 +18,8 @@
         </Grid.ColumnDefinitions>
         <Border Grid.Row="0" Grid.Column="0" BorderBrush="Black" BorderThickness="1" Margin="10">
             <StackPanel Orientation="Vertical">
-                <Button x:Name="ButtonConnect" Height="20" Margin="5"/>
+                <Button x:Name="ButtonConfig" Height="20" Margin="5" Content="Задать файл настроек" Click="ButtonConfig_Click"/>
+                <Button x:Name="ButtonConnect" Height="20" Margin="5" Content="Подключиться" Click="ButtonConnect_Click"/>
             </StackPanel>
         </Border>
         <Border Grid.Row="0" Grid.Column="1" BorderBrush="Black" BorderThickness="1" Margin="10">

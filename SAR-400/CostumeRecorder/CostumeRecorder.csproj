@@ -101,5 +101,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CostumeController\CostumeController.csproj">
+      <Project>{fb15462e-23c3-4396-93d6-36e05821d5af}</Project>
+      <Name>CostumeController</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
