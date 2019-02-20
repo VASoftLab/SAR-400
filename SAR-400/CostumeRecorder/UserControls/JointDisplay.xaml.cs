@@ -25,7 +25,14 @@ namespace CostumeRecorder.UserControls
             set
             {
                 _value = value;
-                Dispatcher.Invoke(() => TextBoxValue.Text = _value);
+                try
+                {
+                    Dispatcher.Invoke(() => TextBoxValue.Text = _value);
+                }
+                catch
+                {
+                    Dispatcher.Invoke(() => TextBoxValue.Text = _value);
+                }
                 
             }
             get

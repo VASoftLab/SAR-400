@@ -11,7 +11,7 @@ using System.Xml.Linq;
 
 namespace CostumeController
 {
-    public class Costume
+    public class Costume : IDisposable
     {
         const int MaxPPS = 500;
         const int BufSZ = 310;
@@ -285,5 +285,42 @@ namespace CostumeController
                 return 0;
             }
         }
+
+        #region IDisposable
+        private bool disposedValue = false; // Для определения избыточных вызовов
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    Initialized = false;
+                    // ожидаем завершение потока
+                    exchangeDone.WaitOne(1500);
+                }
+
+                // TODO: освободить неуправляемые ресурсы (неуправляемые объекты) и переопределить ниже метод завершения.
+                // TODO: задать большим полям значение NULL.
+
+                disposedValue = true;
+            }
+        }
+
+        // TODO: переопределить метод завершения, только если Dispose(bool disposing) выше включает код для освобождения неуправляемых ресурсов.
+        // ~Costume() {
+        //   // Не изменяйте этот код. Разместите код очистки выше, в методе Dispose(bool disposing).
+        //   Dispose(false);
+        // }
+
+        // Этот код добавлен для правильной реализации шаблона высвобождаемого класса.
+        public void Dispose()
+        {
+            // Не изменяйте этот код. Разместите код очистки выше, в методе Dispose(bool disposing).
+            Dispose(true);
+            // TODO: раскомментировать следующую строку, если метод завершения переопределен выше.
+            // GC.SuppressFinalize(this);
+        }
+        #endregion
     }
 }

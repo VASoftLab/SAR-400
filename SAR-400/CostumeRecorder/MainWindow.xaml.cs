@@ -97,7 +97,8 @@ namespace CostumeRecorder
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            
+            if (SAR.Initialized)
+                SAR.Dispose();
         }
     }
 }
