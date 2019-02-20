@@ -286,6 +286,28 @@ namespace CostumeController
             }
         }
 
+        public string GetCostumeSnapshot()
+        {
+            string snapshot = string.Empty;
+
+            float[] values = _joints.GetValuesArray();
+
+            snapshot = string.Join(";", values);
+
+            return snapshot;
+        }
+
+        public string GetJointNames()
+        {
+            string names = string.Empty;
+
+            string[] jointNames = _joints.GetNamesArray();
+
+            names = string.Join(";", jointNames);
+
+            return names;
+        }
+
         #region IDisposable
         private bool disposedValue = false; // Для определения избыточных вызовов
 

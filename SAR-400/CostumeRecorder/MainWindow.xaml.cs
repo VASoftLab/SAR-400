@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -24,6 +26,8 @@ namespace CostumeRecorder
     {
         Costume SAR;
         string pathToConfig = string.Empty;
+        bool recording = false;
+        Task RecordingTask;
 
         public MainWindow()
         {
@@ -172,6 +176,52 @@ namespace CostumeRecorder
         {
             if (SAR.Initialized)
                 SAR.Dispose();
+        }
+
+        private void ButtonStartRecording_Click(object sender, RoutedEventArgs e)
+        {
+            if (RecordingTask != null)
+            {
+                if (RecordingTask.Status == TaskStatus.Running)
+                    return;
+            }
+            
+            RecordingTask = Task.Factory.StartNew(() =>
+            {
+                System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+
+                string path = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\test.csv";
+
+                using (StreamWriter writer = new StreamWriter(new FileStream(path, FileMode.Create)))
+                {
+                    string header = "Time;" + SAR.GetJointNames();
+                    writer.WriteLine(header);
+
+                    recording = true;
+                    sw.Start();
+                    TimeSpan lastRecordTime = new TimeSpan();
+
+                    while (recording)
+                    {
+                        TimeSpan timeSpan = sw.Elapsed;
+
+                        if ((timeSpan - lastRecordTime).TotalMilliseconds >= 100)
+                        {
+                            string record = $"{Convert.ToInt64(timeSpan.TotalMilliseconds)};" + SAR.GetCostumeSnapshot();
+                            writer.WriteLine(record);
+
+                            lastRecordTime = timeSpan;
+                        }
+                    }
+
+                    sw.Stop();
+                }
+            });
+        }
+
+        private void ButtonStopRecording_Click(object sender, RoutedEventArgs e)
+        {
+            recording = false;
         }
     }
 }

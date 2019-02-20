@@ -20,6 +20,8 @@
             <StackPanel Orientation="Vertical">
                 <Button x:Name="ButtonConfig" Height="20" Margin="5" Content="Задать файл настроек" Click="ButtonConfig_Click"/>
                 <Button x:Name="ButtonConnect" Height="20" Margin="5" Content="Подключиться" Click="ButtonConnect_Click"/>
+                <Button x:Name="ButtonStartRecording" Height="20" Margin="5" Content="Начать запись" Click="ButtonStartRecording_Click"/>
+                <Button x:Name="ButtonStopRecording" Height="20" Margin="5" Content="Остановить запись" Click="ButtonStopRecording_Click"/>
             </StackPanel>
         </Border>
         <Border Grid.Row="0" Grid.Column="1" BorderBrush="Black" BorderThickness="1" Margin="10">
