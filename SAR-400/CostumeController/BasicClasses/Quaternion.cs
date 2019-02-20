@@ -28,10 +28,5 @@ namespace CostumeController
             this.z = z;
             this.w = w;
         }
-
-        public static Vector3 ToEulerAngles(Quaternion q)
-        {
-            return new Vector3(0, 0, 0);
-        }
     }
 }

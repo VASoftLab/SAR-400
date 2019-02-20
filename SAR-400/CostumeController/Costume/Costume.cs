@@ -56,6 +56,11 @@ namespace CostumeController
         public CostumeVoltage Voltage { get; } = new CostumeVoltage();
         #endregion
 
+        #region События
+        public delegate void DataChangedEventHandler();
+        public event DataChangedEventHandler DataChanged;
+        #endregion
+
         protected Encoding idEncoding = ASCIIEncoding.ASCII;
         protected object bufLockTX = new object();
         protected byte[] bufTX = new byte[BufSZ];
@@ -163,7 +168,7 @@ namespace CostumeController
                 UdpClient client = new UdpClient();
                 try
                 {
-                    while(Initialized)
+                    while (Initialized)
                     {
                         var currentPPS = _pps;
                         if (currentPPS <= 0)
@@ -219,9 +224,11 @@ namespace CostumeController
         protected virtual void OnData(byte[] buffer)
         {
             // Update rotation data
-            Rotation = new Quaternion(BitConverter.ToSingle(buffer, 292), BitConverter.ToSingle(buffer, 296), BitConverter.ToSingle(buffer, 300), BitConverter.ToSingle(buffer, 288));
-            var e = Quaternion.ToEulerAngles(Rotation);
+            //Rotation = new Quaternion(BitConverter.ToSingle(buffer, 292), BitConverter.ToSingle(buffer, 296), BitConverter.ToSingle(buffer, 300), BitConverter.ToSingle(buffer, 288));
+            //var e = Quaternion.ToEulerAngles(Rotation);
 
+            MathNet.Spatial.Euclidean.Quaternion rotation = new MathNet.Spatial.Euclidean.Quaternion(BitConverter.ToSingle(buffer, 288), BitConverter.ToSingle(buffer, 292), BitConverter.ToSingle(buffer, 296), BitConverter.ToSingle(buffer, 300));
+            var e = rotation.ToEulerAngles();
             // Update joints value
             foreach (var item in _joints)
             {
@@ -233,19 +240,23 @@ namespace CostumeController
                 {
                     //Индекс вращение вокруг оси x
                     case -10:
-                        var v = e.x;
-                        item.Raw.Value = v > 180 ? v - 360 : v;
-                        break;
+                        //var v = e.x;
+                        //item.Raw.Value = v > 180 ? v - 360 : v;
+                        item.Value = (float)e.Alpha.Degrees;
+                        continue;
                     //Индекс вращение вокруг оси y
                     case -11:
-                        v = e.y;
-                        item.Raw.Value = v > 180 ? v - 360 : v;
-                        break;
+                        //v = e.y;
+                        //item.Raw.Value = v > 180 ? v - 360 : v;
+                        item.Value = (float)e.Beta.Degrees;
+                        continue;
                     //Индекс вращение вокруг оси z
                     case -12:
-                        v = e.z;
-                        item.Raw.Value = v > 180 ? v - 360 : v;
-                        break;
+                        //v = e.z;
+                        //item.Raw.Value = v > 180 ? v - 360 : v;
+                        item.Value = (float)e.Gamma.Degrees;
+                        continue;
+
                 }
 
                 item.Raw.ReadValue(buffer);
@@ -255,6 +266,24 @@ namespace CostumeController
             // Update voltage value
             Voltage.Raw.ReadValue(buffer);
             Voltage.Update();
+
+            DataChanged();
+        }
+
+        public float GetValue(string jointName)
+        {
+            // TODO: Исправить на другое значение
+            if (Joints == null || Joints.Count == 0)
+                return 0;
+
+            try
+            {
+                return Joints.Where(x => x.Name == jointName).FirstOrDefault().Value;
+            }
+            catch
+            {
+                return 0;
+            }
         }
     }
 }

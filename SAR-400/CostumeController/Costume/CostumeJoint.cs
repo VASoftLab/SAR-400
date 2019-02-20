@@ -9,7 +9,7 @@ namespace CostumeController
     public class CostumeJoint
     {
         public string Name;
-        public float Value { get; private set; }
+        public float Value { get; set; }
         public PackedData Raw { get; } = new PackedData();
 
         public float rawValueOffset;

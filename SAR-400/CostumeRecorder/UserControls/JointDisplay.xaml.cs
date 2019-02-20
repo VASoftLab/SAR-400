@@ -20,6 +20,21 @@ namespace CostumeRecorder.UserControls
     /// </summary>
     public partial class JointDisplay : UserControl
     {
+        public string Value
+        {
+            set
+            {
+                _value = value;
+                Dispatcher.Invoke(() => TextBoxValue.Text = _value);
+                
+            }
+            get
+            {
+                return _value;
+            }
+        }
+
+        private string _value;
         public JointDisplay()
         {
             InitializeComponent();

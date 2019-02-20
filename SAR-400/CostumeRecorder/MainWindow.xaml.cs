@@ -34,7 +34,7 @@ namespace CostumeRecorder
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-
+            SAR.DataChanged += UpdateGUI;
         }
 
         private void ButtonConfig_Click(object sender, RoutedEventArgs e)
@@ -58,6 +58,46 @@ namespace CostumeRecorder
                 MessageBox.Show("Успешно подключено!", "Подключение", MessageBoxButton.OK, MessageBoxImage.Information);
             else
                 MessageBox.Show("Ошибка при подключении!", "Подключение", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+
+        private void UpdateGUI()
+        {
+            dispLShoulderF.Value = SAR.GetValue("L.ShoulderF").ToString();
+            dispLShoulderS.Value = SAR.GetValue("L.ShoulderS").ToString();
+            dispLElbowR.Value = SAR.GetValue("L.ElbowR").ToString();
+            dispLElbow.Value = SAR.GetValue("L.Elbow").ToString();
+            dispLWristR.Value = SAR.GetValue("L.WristR").ToString();
+            dispLWristS.Value = SAR.GetValue("L.WristS").ToString();
+            dispLWristF.Value = SAR.GetValue("L.WristF").ToString();
+            dispLFingerIndex.Value = SAR.GetValue("L.Finger.Index").ToString();
+            dispLFingerLittle.Value = SAR.GetValue("L.Finger.Little").ToString();
+            dispLFingerMiddle.Value = SAR.GetValue("L.Finger.Middle").ToString();
+            dispLFingerRing.Value = SAR.GetValue("L.Finger.Ring").ToString();
+            dispLFingerThumbS.Value = SAR.GetValue("L.Finger.ThumbS").ToString();
+            dispLFingerThumb.Value = SAR.GetValue("L.Finger.Thumb").ToString();
+
+            dispRShoulderF.Value = SAR.GetValue("R.ShoulderF").ToString();
+            dispRShoulderS.Value = SAR.GetValue("R.ShoulderS").ToString();
+            dispRElbowR.Value = SAR.GetValue("R.ElbowR").ToString();
+            dispRElbow.Value = SAR.GetValue("R.Elbow").ToString();
+            dispRWristR.Value = SAR.GetValue("R.WristR").ToString();
+            dispRWristS.Value = SAR.GetValue("R.WristS").ToString();
+            dispRWristF.Value = SAR.GetValue("R.WristF").ToString();
+            dispRFingerIndex.Value = SAR.GetValue("R.Finger.Index").ToString();
+            dispRFingerLittle.Value = SAR.GetValue("R.Finger.Little").ToString();
+            dispRFingerMiddle.Value = SAR.GetValue("R.Finger.Middle").ToString();
+            dispRFingerRing.Value = SAR.GetValue("R.Finger.Ring").ToString();
+            dispRFingerThumbS.Value = SAR.GetValue("R.Finger.ThumbS").ToString();
+            dispRFingerThumb.Value = SAR.GetValue("R.Finger.Thumb").ToString();
+
+            dispTorsoR.Value = SAR.GetValue("TorsoR").ToString();
+            dispTorsoF.Value = SAR.GetValue("TorsoF").ToString();
+            dispTorsoS.Value = SAR.GetValue("TorsoS").ToString();
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            
         }
     }
 }
