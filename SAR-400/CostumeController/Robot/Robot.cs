@@ -11,7 +11,7 @@ namespace CostumeController.Robot
 {
     public class Robot : IDisposable
     {
-        public bool Initialized { get; private set; }
+        public bool Connected { get; private set; }
 
         public string Address
         {
@@ -26,15 +26,17 @@ namespace CostumeController.Robot
         private TcpClient _client;
         private NetworkStream _stream;
         private StreamReader _sr;
+        private bool _wait;
+        private string _retString;
 
-        public void Connect()
+        public bool Connect()
         {
-            if (Initialized)
-                return;
+            if (Connected)
+                return true;
             try
             {
                 _client = new TcpClient();
-                _client.Connect(IPAddress.Parse(_ip), _port);
+                _client.Connect(IPAddress.Parse(_ip), (short) _port);
                 _client.Client.DontFragment = true;
                 _client.NoDelay = true;
                 _client.Client.NoDelay = true;
@@ -42,62 +44,100 @@ namespace CostumeController.Robot
 
                 _stream = _client.GetStream();
                 _sr = new StreamReader((System.IO.Stream)_stream);
+                Connected = true;
 
-                Initialized = true;
+                return true;
             }
             catch
             {
-                Initialized = false;
+                Connected = false;
+                return false;
             }
         }
 
-        public void Disconnect()
+        public bool Disconnect()
         {
+            Connected = false;
+
             try
             {
                 _client.Client.Disconnect(true);
                 _client.Close();
-                Initialized = false;
+                return true;
             }
             catch
             {
-                Initialized = false;
+                return false;
             }
         }
 
-        public void ExecuteCommand()
+        public bool ExecuteCommand(CostumeJoint[] joints, double[] endPoints)
         {
-            if (Initialized == false)
-                return;
+            // Если робот не покдлючен или количесвтво узлов не совпадает с количеством конечных точек - прекратить операцию
+            if (Connected == false || joints.Length != endPoints.Length)
+                return false;
 
             try
             {
-                string command = "robot:motors:R.Shoulder:posset:90";
+                // Составить строку команды для заданных узлов и конечных точек
+                StringBuilder command = new StringBuilder();
+                command.Append("robot:motors:");
+                foreach (CostumeJoint joint in joints)
+                    command.Append($"{joint.Name};");
+                command.Append(":posset:");
+                foreach (double endPoint in endPoints)
+                    command.Append($"{endPoint};");
 
-                SendData(command);
+                // Отправить команду на робота
+                bool dataSended = SendData(command.ToString());
+
+                return dataSended;
             }
             catch
             {
-                // Индикация ошибки
+                return false;
             }
         }
 
-        private void SendData(string msg)
+        private bool SendData(string msg)
         {
             try
             {
+                _wait = true;
                 if (_client.Connected)
                 {
                     byte[] bytes = Encoding.ASCII.GetBytes(msg.Trim() + Environment.NewLine);
                     _stream.Write(bytes, 0, bytes.Length);
                     int bytesRead = _stream.ReadByte();
-                    return;
+                    Connected = true;
+                    return true;
                 }
+
+                Connected = false;
+                return false;
             }
-            catch
+            catch (Exception E)
             {
-                // TODO
+                string mes = E.Message;
+                Connected = false;
+                _wait = false;
+                return false;
             }
+        }
+
+        private string GetData(string msg)
+        {
+            if (_wait)
+                return null;
+
+            byte[] bytes = Encoding.ASCII.GetBytes(msg.Trim() + Environment.NewLine);
+            _stream.Write(bytes, 0, bytes.Length);
+
+            if (_stream.ReadByte() != 241)
+                return null;
+
+            _retString = _sr.ReadLine();
+            return _retString;
         }
 
         #region IDisposable
@@ -109,7 +149,7 @@ namespace CostumeController.Robot
             {
                 if (disposing)
                 {
-                    if (Initialized)
+                    if (Connected)
                     {
                         try
                         {
