@@ -8,6 +8,8 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
+using CostumeController.BasicClasses;
+
 namespace CostumeController.Robot
 {
     public class Robot : IDisposable
@@ -45,7 +47,7 @@ namespace CostumeController.Robot
                 _client.ReceiveTimeout = 2000;
 
                 _stream = _client.GetStream();
-                _sr = new StreamReader((System.IO.Stream)_stream);
+                _sr = new StreamReader((Stream)_stream);
                 Connected = true;
 
                 return true;
@@ -73,11 +75,14 @@ namespace CostumeController.Robot
             }
         }
 
-        public bool ExecuteCommand(CostumeJoint[] joints, double[] endPoints)
+        public Answer ExecuteCommand(CostumeJoint[] joints, double[] endPoints)
         {
-            // Если робот не покдлючен или количесвтво узлов не совпадает с количеством конечных точек - прекратить операцию
-            if (Connected == false || joints.Length != endPoints.Length)
-                return false;
+            // Если робот не покдлючен или количесвтво узлов не совпадает с количеством их конечных значений - прекратить операцию
+            if (Connected == false)
+                return Answer.NoConnection;
+
+            if (joints.Length != endPoints.Length)
+                throw new Exception("Количество узлов не совпадает с количеством точек.");
 
             try
             {
@@ -90,23 +95,23 @@ namespace CostumeController.Robot
                 foreach (double endPoint in endPoints)
                     command.Append($"{endPoint.ToString(_ci)};");
 
-                Answer result;
                 // Отправить команду на робота
-                bool dataSended = SendData(command.ToString(), out result);
-
-                return dataSended;
+                return SendData(command.ToString(), 0);
             }
             catch
             {
-                return false;
+                return Answer.ExceptionOccured;
             }
         }
 
-        public bool ExecuteCommand(CostumeJoint[] joints, double[] endPoints, int time)
+        public Answer ExecuteCommand(CostumeJoint[] joints, double[] endPoints, int time)
         {
             // Если робот не покдлючен или количесвтво узлов не совпадает с количеством их конечных значений - прекратить операцию
-            if (Connected == false || joints.Length != endPoints.Length)
-                return false;
+            if (Connected == false)
+                return Answer.NoConnection;
+
+            if (joints.Length != endPoints.Length)
+                throw new Exception("Количество узлов не совпадает с количеством точек.");
 
             try
             {
@@ -119,45 +124,52 @@ namespace CostumeController.Robot
                 foreach (double endPoint in endPoints)
                     command.Append($"{endPoint.ToString(_ci)};");
                 command.Append($":{time}");
-
-                Answer result;
+;
                 // Отправить команду на робота
-                bool dataSended = SendData(command.ToString(), out result);
-
-                return dataSended;
+                return SendData(command.ToString(), time);
             }
             catch
             {
-                return false;
+                return Answer.ExceptionOccured;
             }
         }
 
-        private bool SendData(string msg, out Answer exitCode)
+        private Answer SendData(string msg, int waitTime)
         {
+            if (!_client.Connected)
+            {
+                Connected = false;
+                return Answer.NoConnection;
+            }
+
+            _wait = true;
+            int time = waitTime * 1000;
+
             try
             {
-                _wait = true;
-                if (_client.Connected)
-                {
-                    byte[] bytes = Encoding.ASCII.GetBytes(msg.Trim() + Environment.NewLine);
-                    _stream.Write(bytes, 0, bytes.Length);
-                    exitCode = (Answer)_stream.ReadByte();
-
-                    Connected = true;
-                    return true;
-                }
-                exitCode = Answer.ClientIsNotConnected;
-
-                Connected = false;
-                return false;
+                byte[] bytes = Encoding.ASCII.GetBytes(msg.Trim() + Environment.NewLine);
+                _stream.Write(bytes, 0, bytes.Length);
             }
             catch (Exception E)
             {
-                string mes = E.Message;
-                exitCode = Answer.ExceptionOccured;
                 Connected = false;
                 _wait = false;
-                return false;
+                throw new Exception($"Возникла ошибка при отправке пакета данных роботу. {E.Message}");
+            }
+
+            System.Threading.Thread.Sleep(time);
+
+            try
+            {
+                Answer exitCode = (Answer)_stream.ReadByte();
+                Connected = true;
+                return exitCode;
+            }
+            catch (Exception E)
+            {
+                Connected = false;
+                _wait = false;
+                throw new Exception($"Возникла ошибка при полученни пакета данных от робота. {E.Message}");
             }
         }
 
@@ -166,14 +178,21 @@ namespace CostumeController.Robot
             if (_wait)
                 return null;
 
-            byte[] bytes = Encoding.ASCII.GetBytes(msg.Trim() + Environment.NewLine);
-            _stream.Write(bytes, 0, bytes.Length);
+            try
+            {
+                byte[] bytes = Encoding.ASCII.GetBytes(msg.Trim() + Environment.NewLine);
+                _stream.Write(bytes, 0, bytes.Length);
 
-            if (_stream.ReadByte() != 241)
+                if (_stream.ReadByte() != 241)
+                    return null;
+
+                _retString = _sr.ReadLine();
+                return _retString;
+            }
+            catch
+            {
                 return null;
-
-            _retString = _sr.ReadLine();
-            return _retString;
+            }
         }
 
         #region IDisposable
@@ -207,21 +226,5 @@ namespace CostumeController.Robot
             Dispose(true);
         }
         #endregion
-    }
-
-    enum Answer
-    {
-        ClientIsNotConnected = 0x00,
-        ExceptionOccured = 0x01,
-        SyntaxError = 0xFF,
-        DeviceUnavailable = 0xFE,
-        UnkonwnIndentifier = 0xFD,
-        IncorrectInputValue = 0xFC,
-        CommandExecuted = 0xF0,
-        CommandExecutedWithReturnResult = 0xF1,
-        CommandIsObsolete = 0xF2,
-        CommandIsNotSupportedByDevice = 0xF3,
-        CommandIsNotSupportedBySoftware = 0xF4,
-        MaxAmountOfConnectionsAchieved = 0xFA
     }
 }

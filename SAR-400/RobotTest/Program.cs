@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 
 using CostumeController;
+using CostumeController.BasicClasses;
 using CostumeController.Robot;
 
 namespace RobotTest
@@ -17,6 +18,7 @@ namespace RobotTest
         {
             Thread.Sleep(2000);
             Robot robot = new Robot();
+            Answer result;
 
             if (!robot.Connect())
             {
@@ -28,9 +30,7 @@ namespace RobotTest
 
             Console.WriteLine("Подключение установлено!");
 
-            string[] data = File.ReadAllLines("test_lhand_forward.csv");
-
-            
+            //string[] data = File.ReadAllLines("test_lhand_forward.csv");
 
             CostumeJoint[] joints = new CostumeJoint[2]
             {
@@ -45,19 +45,13 @@ namespace RobotTest
             };
 
             double[] startPosition = new double[2] { -10.65, 15.14};
-            double[] endPosition = new double[2] { -86.56, 7.39};
+            double[] endPosition = new double[2] { -86.56, 7.39 };
 
-            if (robot.ExecuteCommand(joints, startPosition,2))
-                Console.WriteLine("Команда выполнена!");
-            else
-                Console.WriteLine("Команда не выполнена!");
+            result = robot.ExecuteCommand(joints, startPosition, 2);
+            Console.WriteLine($"Результат: {result}");
 
-            Thread.Sleep(2500);
-
-            if (robot.ExecuteCommand(joints, endPosition, 2))
-                Console.WriteLine("Команда выполнена!");
-            else
-                Console.WriteLine("Команда не выполнена!");
+            result = robot.ExecuteCommand(joints, endPosition, 2);
+            Console.WriteLine($"Результат: {result}");
 
             Console.Write("Нажмите любую кнопку для продолжения...");
             Console.ReadKey();
