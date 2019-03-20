@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BasicClasses\Answer.cs" />
     <Compile Include="Costume\Costume.cs" />
     <Compile Include="Costume\CostumeJoint.cs" />
     <Compile Include="Costume\CostumeVoltage.cs" />
