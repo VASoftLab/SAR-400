@@ -15,7 +15,10 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-using CostumeController;
+
+using SAR.Control.Costume;
+using SAR.Control.Recorder;
+using SAR.Control.Robot;
 
 namespace CostumeRecorder
 {
@@ -26,6 +29,8 @@ namespace CostumeRecorder
     {
         Costume SAR;
         string pathToConfig = string.Empty;
+        List<RecorderCommand> commands;
+
         bool recording = false;
         Task RecordingTask;
 
@@ -222,6 +227,44 @@ namespace CostumeRecorder
         private void ButtonStopRecording_Click(object sender, RoutedEventArgs e)
         {
             recording = false;
+        }
+
+        private void ButtonLoadRecord_Click(object sender, RoutedEventArgs e)
+        {
+            Recorder _recorder = new Recorder();
+            string path = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\test.csv";
+            try
+            {
+                commands = _recorder.ReadFromFile(path);
+            }
+            catch
+            {
+                commands = null;
+            }
+        }
+
+        private void ButtonPlayRecord_Click(object sender, RoutedEventArgs e)
+        {
+            if (commands == null)
+            {
+                MessageBox.Show("Не загружен список команд для робота!");
+                return;
+            }
+
+            Robot robot = new Robot();
+            if (!robot.Connect())
+            {
+                MessageBox.Show("Не удалось установить подключение к роботу");
+                return;
+            }
+
+            foreach(RecorderCommand command in commands)
+            {
+                RobotAnswer answer = robot.ExecuteCommand(command.Joints);
+                int duration = (int)Math.Ceiling(command.Duration.TotalMilliseconds);
+                System.Threading.Thread.Sleep(duration);
+            }
+
         }
     }
 }

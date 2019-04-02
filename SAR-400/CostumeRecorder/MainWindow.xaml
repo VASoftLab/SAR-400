@@ -22,6 +22,8 @@
                 <Button x:Name="ButtonConnect" Height="20" Margin="5" Content="Подключиться" Click="ButtonConnect_Click"/>
                 <Button x:Name="ButtonStartRecording" Height="20" Margin="5" Content="Начать запись" Click="ButtonStartRecording_Click"/>
                 <Button x:Name="ButtonStopRecording" Height="20" Margin="5" Content="Остановить запись" Click="ButtonStopRecording_Click"/>
+                <Button x:Name="ButtonLoadRecord" Height="20" Margin="5" Content="Загрузить запись" Click="ButtonLoadRecord_Click"/>
+                <Button x:Name="ButtonPlayRecord" Height="20" Margin="5" Content="Воспроизвести запись" Click="ButtonPlayRecord_Click"/>
             </StackPanel>
         </Border>
         <Border Grid.Row="0" Grid.Column="1" BorderBrush="Black" BorderThickness="1" Margin="10">

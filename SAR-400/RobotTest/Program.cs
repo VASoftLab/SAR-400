@@ -6,9 +6,8 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-using CostumeController;
-using CostumeController.BasicClasses;
-using CostumeController.Robot;
+using SAR.Control.Costume;
+using SAR.Control.Robot;
 
 namespace RobotTest
 {
@@ -18,7 +17,7 @@ namespace RobotTest
         {
             Thread.Sleep(2000);
             Robot robot = new Robot();
-            Answer result;
+            RobotAnswer result;
 
             if (!robot.Connect())
             {
@@ -30,28 +29,24 @@ namespace RobotTest
 
             Console.WriteLine("Подключение установлено!");
 
-            //string[] data = File.ReadAllLines("test_lhand_forward.csv");
+            string[] jointNames = new string[29] { "L.ShoulderF", "L.ShoulderS", "L.ElbowR", "L.Elbow", "L.WristR", "L.WristS", "L.WristF", "L.Finger.Index", "L.Finger.Little", "L.Finger.Middle", "L.Finger.Ring", "L.Finger.ThumbS", "L.Finger.Thumb", "R.ShoulderF", "R.ShoulderS", "R.ElbowR", "R.Elbow", "R.WristR", "R.WristS", "R.WristF", "R.Finger.Index", "R.Finger.Little", "R.Finger.Middle", "R.Finger.Ring", "R.Finger.ThumbS", "R.Finger.Thumb", "TorsoR", "TorsoF", "TorsoS" };
 
-            CostumeJoint[] joints = new CostumeJoint[2]
+            // Проверка на доступность каждого из узлов робота
+            foreach (string name in jointNames)
             {
+                List<CostumeJoint> joints = new List<CostumeJoint>
+                {
                     new CostumeJoint()
                     {
-                        Name = "L.ShoulderF"
-                    },
-                    new CostumeJoint()
-                    {
-                        Name = "L.ShoulderS"
+                        Name = name,
+                        Value = 0.00f
                     }
-            };
+                };
 
-            double[] startPosition = new double[2] { -10.65, 15.14};
-            double[] endPosition = new double[2] { -86.56, 7.39 };
+                result = robot.ExecuteCommand(joints);
 
-            result = robot.ExecuteCommand(joints, startPosition, 2);
-            Console.WriteLine($"Результат: {result}");
-
-            result = robot.ExecuteCommand(joints, endPosition, 2);
-            Console.WriteLine($"Результат: {result}");
+                Console.WriteLine($"Результат для {name}: {result}");
+            }
 
             Console.Write("Нажмите любую кнопку для продолжения...");
             Console.ReadKey();

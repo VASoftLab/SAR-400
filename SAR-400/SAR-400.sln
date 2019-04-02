@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CostumeRecorder", "CostumeR
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RobotTest", "RobotTest\RobotTest.csproj", "{710481AE-26B3-4615-B511-DD37C57B7582}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAR.Control", "SAR.Control\SAR.Control.csproj", "{32CAEE04-F000-4E15-808B-4AEE01FCBEE3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{710481AE-26B3-4615-B511-DD37C57B7582}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{710481AE-26B3-4615-B511-DD37C57B7582}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{710481AE-26B3-4615-B511-DD37C57B7582}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32CAEE04-F000-4E15-808B-4AEE01FCBEE3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32CAEE04-F000-4E15-808B-4AEE01FCBEE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32CAEE04-F000-4E15-808B-4AEE01FCBEE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32CAEE04-F000-4E15-808B-4AEE01FCBEE3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
