@@ -232,7 +232,7 @@ namespace CostumeRecorder
         private void ButtonLoadRecord_Click(object sender, RoutedEventArgs e)
         {
             Recorder _recorder = new Recorder();
-            string path = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\test.csv";
+            string path = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\lar_1.csv";
             try
             {
                 commands = _recorder.ReadFromFile(path);

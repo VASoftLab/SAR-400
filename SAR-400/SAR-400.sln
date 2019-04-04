@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.329
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CostumeController", "CostumeController\CostumeController.csproj", "{FB15462E-23C3-4396-93D6-36E05821D5AF}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControllerTest", "ControllerTest\ControllerTest.csproj", "{16F37E09-1CBA-44B6-AC6E-205B6BBF7FEB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CostumeRecorder", "CostumeRecorder\CostumeRecorder.csproj", "{4F1F2A2E-0AC5-4C90-8802-357C7B1B3CEB}"
@@ -19,10 +17,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{FB15462E-23C3-4396-93D6-36E05821D5AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FB15462E-23C3-4396-93D6-36E05821D5AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FB15462E-23C3-4396-93D6-36E05821D5AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FB15462E-23C3-4396-93D6-36E05821D5AF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{16F37E09-1CBA-44B6-AC6E-205B6BBF7FEB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{16F37E09-1CBA-44B6-AC6E-205B6BBF7FEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{16F37E09-1CBA-44B6-AC6E-205B6BBF7FEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
