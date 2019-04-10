@@ -74,5 +74,11 @@
                 <uc:JointDisplay x:Name="dispTorsoS" Grid.Row="5" Grid.Column="3"/>
             </Grid>
         </Border>
+
+        <Border BorderBrush="Black" BorderThickness="1" Grid.Row="2" Grid.ColumnSpan="2" Grid.Column="0" Margin="10">
+            <ScrollViewer>
+                <TextBlock x:Name="TextDebug" TextWrapping="Wrap"/>
+            </ScrollViewer>
+        </Border>
     </Grid>
 </Window>

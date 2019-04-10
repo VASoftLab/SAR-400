@@ -232,10 +232,11 @@ namespace CostumeRecorder
         private void ButtonLoadRecord_Click(object sender, RoutedEventArgs e)
         {
             Recorder _recorder = new Recorder();
-            string path = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\lar_1.csv";
+            string path = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\lar_1_1s.csv";
             try
             {
                 commands = _recorder.ReadFromFile(path);
+                TextDebug.Text += $"Загружено успешно" + Environment.NewLine;
             }
             catch
             {
@@ -258,11 +259,12 @@ namespace CostumeRecorder
                 return;
             }
 
-            foreach(RecorderCommand command in commands)
+            foreach (RecorderCommand command in commands)
             {
-                RobotAnswer answer = robot.ExecuteCommand(command.Joints);
-                int duration = (int)Math.Ceiling(command.Duration.TotalMilliseconds);
-                System.Threading.Thread.Sleep(duration);
+                RobotAnswer answer = robot.ExecuteCommand(command.Joints,command.Duration);
+                TextDebug.Text += answer.ToString() + Environment.NewLine;
+                //int duration = (int)Math.Ceiling(command.Duration.TotalMilliseconds);
+                //System.Threading.Thread.Sleep(duration);
             }
 
         }

@@ -102,7 +102,7 @@ namespace SAR.Control.Robot
             }
         }
 
-        public RobotAnswer ExecuteCommand(List<CostumeJoint> joints, int time)
+        public RobotAnswer ExecuteCommand(List<CostumeJoint> joints, TimeSpan time)
         {
             // Если робот не покдлючен или количесвтво узлов не совпадает с количеством их конечных значений - прекратить операцию
             if (Connected == false)
@@ -120,13 +120,16 @@ namespace SAR.Control.Robot
                 foreach (CostumeJoint joint in joints)
                     command.Append($"{joint.Value.ToString(_ci)};");
 
-                command.Append($":{time}");
+                int miliseconds = (int)Math.Ceiling(time.TotalMilliseconds);
+
+                command.Append($":{miliseconds}");
 
                 // Отправить команду на робота
-                return SendData(command.ToString(), time);
+                return SendData(command.ToString(), miliseconds);
             }
-            catch
+            catch(Exception E)
             {
+                var text = E.Message;
                 return RobotAnswer.ExceptionOccured;
             }
         }
@@ -140,7 +143,7 @@ namespace SAR.Control.Robot
             }
 
             _wait = true;
-            int time = waitTime * 1000;
+            int time = waitTime;
 
             try
             {
