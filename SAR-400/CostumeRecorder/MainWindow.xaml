@@ -6,15 +6,16 @@
         xmlns:local="clr-namespace:CostumeRecorder"
         xmlns:uc="clr-namespace:CostumeRecorder.UserControls"
         mc:Ignorable="d" WindowStartupLocation="CenterScreen"
-        Title="SAR Costume Recorder" Height="600" Width="1000" Loaded="Window_Loaded" Closing="Window_Closing">
+        Title="SAR Costume Recorder" Height="650" Width="1000" Loaded="Window_Loaded" Closing="Window_Closing">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="0.8*"/>
             <RowDefinition Height="0.2*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0.2*"/>
-            <ColumnDefinition Width="0.8*"/>
+            <ColumnDefinition Width="0.3*"/>
+            <ColumnDefinition Width="0.7*"/>
+            <ColumnDefinition Width="320"/>
         </Grid.ColumnDefinitions>
         <Border Grid.Row="0" Grid.Column="0" BorderBrush="Black" BorderThickness="1" Margin="10">
             <StackPanel Orientation="Vertical">
@@ -26,56 +27,18 @@
                 <Button x:Name="ButtonPlayRecord" Height="20" Margin="5" Content="Воспроизвести запись" Click="ButtonPlayRecord_Click"/>
             </StackPanel>
         </Border>
-        <Border Grid.Row="0" Grid.Column="1" BorderBrush="Black" BorderThickness="1" Margin="10">
-            <Grid x:Name="GridCurrentValues" ShowGridLines="True">
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <uc:JointDisplay x:Name="dispLShoulderF" Grid.Row="0" Grid.Column="0"/>
-                <uc:JointDisplay x:Name="dispLShoulderS" Grid.Row="0" Grid.Column="1"/>
-                <uc:JointDisplay x:Name="dispLElbowR" Grid.Row="0" Grid.Column="2"/>
-                <uc:JointDisplay x:Name="dispLElbow" Grid.Row="0" Grid.Column="3"/>
-                <uc:JointDisplay x:Name="dispLWristR" Grid.Row="0" Grid.Column="4"/>
-                <uc:JointDisplay x:Name="dispLWristS" Grid.Row="1" Grid.Column="0"/>
-                <uc:JointDisplay x:Name="dispLWristF" Grid.Row="1" Grid.Column="1"/>
-                <uc:JointDisplay x:Name="dispLFingerIndex" Grid.Row="1" Grid.Column="2"/>
-                <uc:JointDisplay x:Name="dispLFingerLittle" Grid.Row="1" Grid.Column="3"/>
-                <uc:JointDisplay x:Name="dispLFingerMiddle" Grid.Row="1" Grid.Column="4"/>
-                <uc:JointDisplay x:Name="dispLFingerRing" Grid.Row="2" Grid.Column="0"/>
-                <uc:JointDisplay x:Name="dispLFingerThumbS" Grid.Row="2" Grid.Column="1"/>
-                <uc:JointDisplay x:Name="dispLFingerThumb" Grid.Row="2" Grid.Column="2"/>
-                <uc:JointDisplay x:Name="dispRShoulderF" Grid.Row="2" Grid.Column="3"/>
-                <uc:JointDisplay x:Name="dispRShoulderS" Grid.Row="2" Grid.Column="4"/>
-                <uc:JointDisplay x:Name="dispRElbowR" Grid.Row="3" Grid.Column="0"/>
-                <uc:JointDisplay x:Name="dispRElbow" Grid.Row="3" Grid.Column="1"/>
-                <uc:JointDisplay x:Name="dispRWristR" Grid.Row="3" Grid.Column="2"/>
-                <uc:JointDisplay x:Name="dispRWristS" Grid.Row="3" Grid.Column="3"/>
-                <uc:JointDisplay x:Name="dispRWristF" Grid.Row="3" Grid.Column="4"/>
-                <uc:JointDisplay x:Name="dispRFingerIndex" Grid.Row="4" Grid.Column="0"/>
-                <uc:JointDisplay x:Name="dispRFingerLittle" Grid.Row="4" Grid.Column="1"/>
-                <uc:JointDisplay x:Name="dispRFingerMiddle" Grid.Row="4" Grid.Column="2"/>
-                <uc:JointDisplay x:Name="dispRFingerRing" Grid.Row="4" Grid.Column="3"/>
-                <uc:JointDisplay x:Name="dispRFingerThumbS" Grid.Row="4" Grid.Column="4"/>
-                <uc:JointDisplay x:Name="dispRFingerThumb" Grid.Row="5" Grid.Column="0"/>
-                <uc:JointDisplay x:Name="dispTorsoR" Grid.Row="5" Grid.Column="1"/>
-                <uc:JointDisplay x:Name="dispTorsoF" Grid.Row="5" Grid.Column="2"/>
-                <uc:JointDisplay x:Name="dispTorsoS" Grid.Row="5" Grid.Column="3"/>
-            </Grid>
-        </Border>
 
-        <Border BorderBrush="Black" BorderThickness="1" Grid.Row="2" Grid.ColumnSpan="2" Grid.Column="0" Margin="10">
+        <Border Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" BorderBrush="Black" BorderThickness="1" Margin="10" Width="300">
+            <DataGrid x:Name="DataGridJoints" AutoGenerateColumns="False"
+                      CanUserAddRows="False" CanUserResizeRows="False" CanUserReorderColumns="False"
+                      CanUserDeleteRows="False" CanUserResizeColumns="False" HorizontalScrollBarVisibility="Disabled">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Название звена" Width="200" Binding="{Binding Path=Name}"/>
+                    <DataGridTextColumn Header="Значение" Width="*" Binding="{Binding Path=Value, StringFormat=N2}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
+        <Border BorderBrush="Black" BorderThickness="1" Grid.RowSpan="2" Grid.Column="1" Margin="10">
             <ScrollViewer>
                 <TextBlock x:Name="TextDebug" TextWrapping="Wrap"/>
             </ScrollViewer>

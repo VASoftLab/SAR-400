@@ -8,7 +8,7 @@ namespace SAR.Control.Costume
 {
     public class CostumeJoint
     {
-        public string Name;
+        public string Name { get; set; }
         public float Value { get; set; }
         public PackedData Raw { get; } = new PackedData();
 

@@ -74,6 +74,9 @@ namespace SAR.Control.Robot
             }
         }
 
+        public delegate void ErrorOccuredEventHandler(string message);
+        public event ErrorOccuredEventHandler ErrorOccured;
+
         public RobotAnswer ExecuteCommand(List<CostumeJoint> joints)
         {
             // Если робот не покдлючен или количесвтво узлов не совпадает с количеством их конечных значений - прекратить операцию
@@ -120,21 +123,21 @@ namespace SAR.Control.Robot
                 foreach (CostumeJoint joint in joints)
                     command.Append($"{joint.Value.ToString(_ci)};");
 
-                int miliseconds = (int)Math.Ceiling(time.TotalMilliseconds);
+                float seconds = (float)time.TotalSeconds;
 
-                command.Append($":{miliseconds}");
+                command.Append($":{seconds}");
 
                 // Отправить команду на робота
-                return SendData(command.ToString(), miliseconds);
+                return SendData(command.ToString(), seconds);
             }
             catch(Exception E)
             {
-                var text = E.Message;
+                ErrorOccured?.Invoke("Возникла ошибка при выполнении команды. "+ E.Message);
                 return RobotAnswer.ExceptionOccured;
             }
         }
 
-        private RobotAnswer SendData(string msg, int waitTime)
+        private RobotAnswer SendData(string msg, float waitTime)
         {
             if (!_client.Connected)
             {
@@ -143,7 +146,8 @@ namespace SAR.Control.Robot
             }
 
             _wait = true;
-            int time = waitTime;
+            // Переводим секунды в милисекунды
+            int time = (int)(waitTime *1000);
 
             try
             {
@@ -161,7 +165,8 @@ namespace SAR.Control.Robot
 
             try
             {
-                RobotAnswer exitCode = (RobotAnswer)_stream.ReadByte();
+                //RobotAnswer exitCode = (RobotAnswer)_stream.ReadByte();
+                RobotAnswer exitCode = RobotAnswer.CommandExecuted;
                 Connected = true;
                 return exitCode;
             }

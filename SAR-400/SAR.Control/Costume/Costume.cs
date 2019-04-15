@@ -210,7 +210,17 @@ namespace SAR.Control.Costume
                 return;
 
             var addr = new IPEndPoint(0, 0);
-            var receiveBytes = server.EndReceive(ar, ref addr);
+            byte[] receiveBytes = null;
+
+            try
+            {
+                receiveBytes = server.EndReceive(ar, ref addr);
+            }
+            catch
+            {
+                return;
+            }
+
             if (receiveBytes == null)
                 return;
 
@@ -269,7 +279,7 @@ namespace SAR.Control.Costume
             Voltage.Raw.ReadValue(buffer);
             Voltage.Update();
 
-            DataChanged();
+            DataChanged?.Invoke();
         }
 
         public float GetValue(string jointName)
