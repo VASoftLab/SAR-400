@@ -60,8 +60,9 @@ namespace RobotTest
             };
 
             robot.Connect();
-            robot.ExecuteCommand(commands, TimeSpan.FromSeconds(2));
+            var answ = robot.ExecuteCommand(commands, TimeSpan.FromSeconds(0.1));
 
+            Console.WriteLine(answ);
 
             Console.Write("Нажмите любую кнопку для продолжения...");
             Console.ReadKey();

@@ -138,7 +138,7 @@ namespace CostumeRecorder
         private void ButtonLoadRecord_Click(object sender, RoutedEventArgs e)
         {
             Recorder _recorder = new Recorder();
-            string path = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\lar_1_1s.csv";
+            string path = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\lar_1_0.5s.csv";
             try
             {
                 commands = _recorder.ReadFromFile(path);

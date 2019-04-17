@@ -47,7 +47,11 @@ namespace SAR.Control.Recorder
 
                         // Рассчитать длительность выполнения команды
                         TimeSpan _currentRecordTime = TimeSpan.FromMilliseconds(Convert.ToDouble(record[0]));
-                        command.Duration = (_currentRecordTime - _previousRecordTime);
+                        if (result.Count == 0)
+                            command.Duration = TimeSpan.FromSeconds(2);
+                        else
+                            command.Duration = (_currentRecordTime - _previousRecordTime);
+
                         _previousRecordTime = _currentRecordTime;
 
 

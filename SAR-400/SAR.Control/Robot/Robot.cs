@@ -43,7 +43,7 @@ namespace SAR.Control.Robot
                 _client.Client.DontFragment = true;
                 _client.NoDelay = true;
                 _client.Client.NoDelay = true;
-                _client.ReceiveTimeout = 2000;
+                _client.ReceiveTimeout = 3000;
 
                 _stream = _client.GetStream();
                 _sr = new StreamReader((Stream)_stream);
@@ -97,7 +97,7 @@ namespace SAR.Control.Robot
                     command.Append($"{joint.Value.ToString(_ci)};");
 
                 // Отправить команду на робота
-                return SendData(command.ToString(), 0);
+                return SendData(command.ToString());
             }
             catch
             {
@@ -125,10 +125,11 @@ namespace SAR.Control.Robot
 
                 float seconds = (float)time.TotalSeconds;
 
-                command.Append($":{seconds}");
+                int miliseconds = Convert.ToInt32(Math.Ceiling(time.TotalMilliseconds));
+                command.Append($":{seconds.ToString(_ci)}");
 
                 // Отправить команду на робота
-                return SendData(command.ToString(), seconds);
+                return SendData(command.ToString());
             }
             catch(Exception E)
             {
@@ -137,7 +138,7 @@ namespace SAR.Control.Robot
             }
         }
 
-        private RobotAnswer SendData(string msg, float waitTime)
+        private RobotAnswer SendData(string msg)
         {
             if (!_client.Connected)
             {
@@ -147,7 +148,7 @@ namespace SAR.Control.Robot
 
             _wait = true;
             // Переводим секунды в милисекунды
-            int time = (int)(waitTime *1000);
+            //int time = (int)(waitTime *1000);
 
             try
             {
@@ -161,12 +162,9 @@ namespace SAR.Control.Robot
                 throw new Exception($"Возникла ошибка при отправке пакета данных роботу. {E.Message}");
             }
 
-            System.Threading.Thread.Sleep(time);
-
             try
             {
-                //RobotAnswer exitCode = (RobotAnswer)_stream.ReadByte();
-                RobotAnswer exitCode = RobotAnswer.CommandExecuted;
+                RobotAnswer exitCode = (RobotAnswer)_stream.ReadByte();;
                 Connected = true;
                 return exitCode;
             }
@@ -174,7 +172,8 @@ namespace SAR.Control.Robot
             {
                 Connected = false;
                 _wait = false;
-                throw new Exception($"Возникла ошибка при полученни пакета данных от робота. {E.Message}");
+                ErrorOccured?.Invoke("Возникла ошибка при отправке команды. " + E.Message);
+                return RobotAnswer.ExceptionOccured;
             }
         }
 
