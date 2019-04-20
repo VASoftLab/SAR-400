@@ -30,7 +30,7 @@ namespace CostumeRecorder
     {
         // Костюм
         Costume Costume;
-        string pathToConfig = string.Empty;
+        string _pathToCostumeConfig = string.Empty;
 
         // Робот
         Robot Robot;
@@ -67,20 +67,31 @@ namespace CostumeRecorder
 
             if (result == true)
             {
-                pathToConfig = opf.FileName;
+                _pathToCostumeConfig = opf.FileName;
+                AppLog.Write($"Путь к файлу настроек костюма задан. Новый путь: {_pathToCostumeConfig}.");
             }
         }
 
         private void ButtonConnect_Click(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(pathToConfig) == false)
-                Costume.Initialize(pathToConfig);
+            if (!string.IsNullOrEmpty(_pathToCostumeConfig))
+                Costume.Initialize(_pathToCostumeConfig);
+            else
+            {
+                AppLog.Write("Подключение не выполнено. Не выбран файл настроек костюма.");
+                return;
+            }
 
             if (Costume.Initialized)
-                MessageBox.Show("Успешно подключено!", "Подключение", MessageBoxButton.OK, MessageBoxImage.Information);
+            {
+                AppLog.Write("Соединение с костюмом успешно установлено!");
+            }
             else
-                MessageBox.Show("Ошибка при подключении!", "Подключение", MessageBoxButton.OK, MessageBoxImage.Error);
-
+            {
+                AppLog.Write("Ошибка при подключении к костюму!");
+                return;
+            }
+                
             DataGridJoints.ItemsSource = Costume.Joints;
             timerGUI.Start();
         }

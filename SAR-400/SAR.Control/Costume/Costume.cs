@@ -28,6 +28,7 @@ namespace SAR.Control.Costume
                 return _joints;
             }
         }
+
         /// <summary>
         /// Количество пакетов данных с робота, принимаемых в секунду.
         /// </summary>
@@ -44,7 +45,7 @@ namespace SAR.Control.Costume
         }
 
         /// <summary>
-        /// Сетевой адрес робота в сети.
+        /// Сетевой адрес робота.
         /// </summary>
         public string Address
         {
