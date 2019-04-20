@@ -28,8 +28,8 @@
                 <Label Grid.Row="0" Content="Панель управления" Style="{DynamicResource LabelStyleSectionTitle}"/>
                 <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
                     <StackPanel Orientation="Vertical">
-                        <Button x:Name="ButtonConfig" Content="Задать файл настроек костюма" Style="{DynamicResource ButtonStyleMenu}" Click="ButtonConfig_Click"/>
-                        <Button x:Name="ButtonConnect" Content="Подключиться" Style="{DynamicResource ButtonStyleMenu}" Click="ButtonConnect_Click"/>
+                        <Button x:Name="ButtonConfig" Content="Загрузить настройки костюма из файла" Style="{DynamicResource ButtonStyleMenu}" Click="ButtonConfig_Click"/>
+                        <Button x:Name="ButtonConnect" Content="Подключиться к костюму" Style="{DynamicResource ButtonStyleMenu}" Click="ButtonConnect_Click"/>
                         <Button x:Name="ButtonStartRecording" Content="Начать запись" Style="{DynamicResource ButtonStyleMenu}" Click="ButtonStartRecording_Click"/>
                         <Button x:Name="ButtonStopRecording" Content="Остановить запись" Style="{DynamicResource ButtonStyleMenu}" Click="ButtonStopRecording_Click"/>
                         <Button x:Name="ButtonLoadRecord" Content="Загрузить запись" Style="{DynamicResource ButtonStyleMenu}" Click="ButtonLoadRecord_Click"/>

@@ -127,12 +127,23 @@ namespace SAR.Control.Costume
                 }
 
                 Initialized = true;
-
-                new Thread(Exchange).Start();
             }
             finally
             {
                 xDoc = null;
+            }
+        }
+
+        public bool Connect()
+        {
+            if (Initialized)
+            {
+                new Thread(Exchange).Start();
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 

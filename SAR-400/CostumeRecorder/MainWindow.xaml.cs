@@ -70,30 +70,39 @@ namespace CostumeRecorder
                 _pathToCostumeConfig = opf.FileName;
                 AppLog.Write($"Путь к файлу настроек костюма задан. Новый путь: {_pathToCostumeConfig}.");
             }
-        }
 
-        private void ButtonConnect_Click(object sender, RoutedEventArgs e)
-        {
             if (!string.IsNullOrEmpty(_pathToCostumeConfig))
                 Costume.Initialize(_pathToCostumeConfig);
             else
             {
-                AppLog.Write("Подключение не выполнено. Не выбран файл настроек костюма.");
+                AppLog.Write("Загрузка настроек костюма не выполнена. Не выбран файл настроек костюма.");
                 return;
             }
 
             if (Costume.Initialized)
             {
-                AppLog.Write("Соединение с костюмом успешно установлено!");
+                AppLog.Write("Настройки костюма успешно загружены!");
             }
             else
             {
-                AppLog.Write("Ошибка при подключении к костюму!");
+                AppLog.Write("Ошибка при загрузке настроек костюма!");
                 return;
             }
-                
+
             DataGridJoints.ItemsSource = Costume.Joints;
-            timerGUI.Start();
+        }
+
+        private void ButtonConnect_Click(object sender, RoutedEventArgs e)
+        {
+            if (Costume.Connect())
+            {
+                timerGUI.Start();
+                AppLog.Write("Движения костюма остлеживаются!");
+            }
+            else
+            {
+                AppLog.Write("Невозможно начать остлеживание движения костюма!");
+            }
         }
 
         private void UpdateGUI(object sender, EventArgs e)
