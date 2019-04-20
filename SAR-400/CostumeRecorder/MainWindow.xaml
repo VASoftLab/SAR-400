@@ -10,13 +10,13 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="0.55*"/>
-            <RowDefinition Height="0.15*"/>
-            <RowDefinition Height="0.15*"/>
-            <RowDefinition Height="0.15*"/>
+            <RowDefinition Height="85"/>
+            <RowDefinition Height="85"/>
+            <RowDefinition Height="85"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0.3*"/>
-            <ColumnDefinition Width="0.7*"/>
+            <ColumnDefinition Width="250"/>
+            <ColumnDefinition Width="1*"/>
             <ColumnDefinition Width="320"/>
         </Grid.ColumnDefinitions>
         <Border Grid.Row="0" Grid.Column="0" BorderBrush="Black" BorderThickness="1" Margin="5">
@@ -26,15 +26,17 @@
                     <RowDefinition/>
                 </Grid.RowDefinitions>
                 <Label Grid.Row="0" Content="Панель управления" Style="{DynamicResource LabelStyleSectionTitle}"/>
-                <StackPanel Grid.Row="1" Orientation="Vertical">
-                    <Button x:Name="ButtonConfig" Content="Задать файл настроек костюма" Style="{DynamicResource ButtonStyleMenu}" Click="ButtonConfig_Click"/>
-                    <Button x:Name="ButtonConnect" Content="Подключиться" Style="{DynamicResource ButtonStyleMenu}" Click="ButtonConnect_Click"/>
-                    <Button x:Name="ButtonStartRecording" Content="Начать запись" Style="{DynamicResource ButtonStyleMenu}" Click="ButtonStartRecording_Click"/>
-                    <Button x:Name="ButtonStopRecording" Content="Остановить запись" Style="{DynamicResource ButtonStyleMenu}" Click="ButtonStopRecording_Click"/>
-                    <Button x:Name="ButtonLoadRecord" Content="Загрузить запись" Style="{DynamicResource ButtonStyleMenu}" Click="ButtonLoadRecord_Click"/>
-                    <Button x:Name="ButtonPlayRecord" Content="Воспроизвести запись" Style="{DynamicResource ButtonStyleMenu}" Click="ButtonPlayRecord_Click"/>
-                    <Button x:Name="ButtonPlayTestMessage" Content="Тестовый лог" Style="{DynamicResource ButtonStyleMenu}" Click="ButtonPlayTestMessage_Click"/>
-                </StackPanel>
+                <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                    <StackPanel Orientation="Vertical">
+                        <Button x:Name="ButtonConfig" Content="Задать файл настроек костюма" Style="{DynamicResource ButtonStyleMenu}" Click="ButtonConfig_Click"/>
+                        <Button x:Name="ButtonConnect" Content="Подключиться" Style="{DynamicResource ButtonStyleMenu}" Click="ButtonConnect_Click"/>
+                        <Button x:Name="ButtonStartRecording" Content="Начать запись" Style="{DynamicResource ButtonStyleMenu}" Click="ButtonStartRecording_Click"/>
+                        <Button x:Name="ButtonStopRecording" Content="Остановить запись" Style="{DynamicResource ButtonStyleMenu}" Click="ButtonStopRecording_Click"/>
+                        <Button x:Name="ButtonLoadRecord" Content="Загрузить запись" Style="{DynamicResource ButtonStyleMenu}" Click="ButtonLoadRecord_Click"/>
+                        <Button x:Name="ButtonPlayRecord" Content="Воспроизвести запись" Style="{DynamicResource ButtonStyleMenu}" Click="ButtonPlayRecord_Click"/>
+                        <Button x:Name="ButtonPlayTestMessage" Content="Тестовый лог" Style="{DynamicResource ButtonStyleMenu}" Click="ButtonPlayTestMessage_Click"/>
+                    </StackPanel>
+                </ScrollViewer>
             </Grid>
         </Border>
 
