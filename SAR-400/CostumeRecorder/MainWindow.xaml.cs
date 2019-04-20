@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Diagnostics;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
@@ -27,12 +28,18 @@ namespace CostumeRecorder
     /// </summary>
     public partial class MainWindow : Window
     {
-        Costume SAR;
+        // Костюм
+        Costume Costume;
         string pathToConfig = string.Empty;
+
+        // Робот
+        Robot Robot;
         List<RecorderCommand> commands;
 
         bool recording = false;
         Task RecordingTask;
+
+        Log AppLog;
 
         System.Timers.Timer timerGUI = new System.Timers.Timer { Interval = 500 };
 
@@ -40,13 +47,16 @@ namespace CostumeRecorder
         {
             InitializeComponent();
 
-            SAR = new Costume();
+            Costume = new Costume();
+            Robot = new Robot();
+            AppLog = new Log(TextDebug, "Session.Log", true);
+
             timerGUI.Elapsed += UpdateGUI;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            
+            AppLog.Write("Программа запущена.");
         }
 
         private void ButtonConfig_Click(object sender, RoutedEventArgs e)
@@ -64,14 +74,14 @@ namespace CostumeRecorder
         private void ButtonConnect_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrEmpty(pathToConfig) == false)
-                SAR.Initialize(pathToConfig);
+                Costume.Initialize(pathToConfig);
 
-            if (SAR.Initialized)
+            if (Costume.Initialized)
                 MessageBox.Show("Успешно подключено!", "Подключение", MessageBoxButton.OK, MessageBoxImage.Information);
             else
                 MessageBox.Show("Ошибка при подключении!", "Подключение", MessageBoxButton.OK, MessageBoxImage.Error);
 
-            DataGridJoints.ItemsSource = SAR.Joints;
+            DataGridJoints.ItemsSource = Costume.Joints;
             timerGUI.Start();
         }
 
@@ -85,8 +95,8 @@ namespace CostumeRecorder
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (SAR.Initialized)
-                SAR.Dispose();
+            if (Costume.Initialized)
+                Costume.Dispose();
         }
 
         private void ButtonStartRecording_Click(object sender, RoutedEventArgs e)
@@ -99,13 +109,13 @@ namespace CostumeRecorder
             
             RecordingTask = Task.Factory.StartNew(() =>
             {
-                System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+                Stopwatch sw = new Stopwatch();
 
                 string path = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\test.csv";
 
                 using (StreamWriter writer = new StreamWriter(new FileStream(path, FileMode.Create)))
                 {
-                    string header = "Time;" + SAR.GetJointNames();
+                    string header = "Time;" + Costume.GetJointNames();
                     writer.WriteLine(header);
 
                     recording = true;
@@ -118,7 +128,7 @@ namespace CostumeRecorder
 
                         if ((timeSpan - lastRecordTime).TotalMilliseconds >= 100)
                         {
-                            string record = $"{Convert.ToInt64(timeSpan.TotalMilliseconds)};" + SAR.GetCostumeSnapshot();
+                            string record = $"{Convert.ToInt64(timeSpan.TotalMilliseconds)};" + Costume.GetCostumeSnapshot();
                             writer.WriteLine(record);
 
                             lastRecordTime = timeSpan;
@@ -178,6 +188,11 @@ namespace CostumeRecorder
                 //System.Threading.Thread.Sleep(duration);
             }
 
+        }
+
+        private void ButtonPlayTestMessage_Click(object sender, RoutedEventArgs e)
+        {
+            AppLog.Write("Тестовое сообщение");
         }
     }
 }

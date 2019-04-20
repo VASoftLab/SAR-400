@@ -9,39 +9,102 @@
         Title="SAR Costume Recorder" Height="650" Width="1000" Loaded="Window_Loaded" Closing="Window_Closing">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="0.8*"/>
-            <RowDefinition Height="0.2*"/>
+            <RowDefinition Height="0.55*"/>
+            <RowDefinition Height="0.15*"/>
+            <RowDefinition Height="0.15*"/>
+            <RowDefinition Height="0.15*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0.3*"/>
             <ColumnDefinition Width="0.7*"/>
             <ColumnDefinition Width="320"/>
         </Grid.ColumnDefinitions>
-        <Border Grid.Row="0" Grid.Column="0" BorderBrush="Black" BorderThickness="1" Margin="10">
-            <StackPanel Orientation="Vertical">
-                <Button x:Name="ButtonConfig" Height="20" Margin="5" Content="Задать файл настроек" Click="ButtonConfig_Click"/>
-                <Button x:Name="ButtonConnect" Height="20" Margin="5" Content="Подключиться" Click="ButtonConnect_Click"/>
-                <Button x:Name="ButtonStartRecording" Height="20" Margin="5" Content="Начать запись" Click="ButtonStartRecording_Click"/>
-                <Button x:Name="ButtonStopRecording" Height="20" Margin="5" Content="Остановить запись" Click="ButtonStopRecording_Click"/>
-                <Button x:Name="ButtonLoadRecord" Height="20" Margin="5" Content="Загрузить запись" Click="ButtonLoadRecord_Click"/>
-                <Button x:Name="ButtonPlayRecord" Height="20" Margin="5" Content="Воспроизвести запись" Click="ButtonPlayRecord_Click"/>
-            </StackPanel>
+        <Border Grid.Row="0" Grid.Column="0" BorderBrush="Black" BorderThickness="1" Margin="5">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Label Grid.Row="0" Content="Панель управления" Style="{DynamicResource LabelStyleSectionTitle}"/>
+                <StackPanel Grid.Row="1" Orientation="Vertical">
+                    <Button x:Name="ButtonConfig" Height="20" Margin="5" Content="Задать файл настроек" Click="ButtonConfig_Click"/>
+                    <Button x:Name="ButtonConnect" Height="20" Margin="5" Content="Подключиться" Click="ButtonConnect_Click"/>
+                    <Button x:Name="ButtonStartRecording" Height="20" Margin="5" Content="Начать запись" Click="ButtonStartRecording_Click"/>
+                    <Button x:Name="ButtonStopRecording" Height="20" Margin="5" Content="Остановить запись" Click="ButtonStopRecording_Click"/>
+                    <Button x:Name="ButtonLoadRecord" Height="20" Margin="5" Content="Загрузить запись" Click="ButtonLoadRecord_Click"/>
+                    <Button x:Name="ButtonPlayRecord" Height="20" Margin="5" Content="Воспроизвести запись" Click="ButtonPlayRecord_Click"/>
+                    <Button x:Name="ButtonPlayTestMessage" Height="20" Margin="5" Content="Воспроизвести запись" Click="ButtonPlayTestMessage_Click"/>
+                </StackPanel>
+            </Grid>
         </Border>
 
-        <Border Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" BorderBrush="Black" BorderThickness="1" Margin="10" Width="300">
-            <DataGrid x:Name="DataGridJoints" AutoGenerateColumns="False"
-                      CanUserAddRows="False" CanUserResizeRows="False" CanUserReorderColumns="False"
+        <Border Grid.Row="0" Grid.Column="2" Grid.RowSpan="4" BorderBrush="Black" BorderThickness="1" Margin="5">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Label Grid.Row="0" Content="Текущее состояние костюма" Style="{DynamicResource LabelStyleSectionTitle}"/>
+                <DataGrid x:Name="DataGridJoints" Grid.Row="1" AutoGenerateColumns="False" BorderThickness="0"
+                      CanUserAddRows="False" CanUserResizeRows="False" CanUserReorderColumns="False" CanUserSortColumns="False"
                       CanUserDeleteRows="False" CanUserResizeColumns="False" HorizontalScrollBarVisibility="Disabled">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Название звена" Width="200" Binding="{Binding Path=Name}"/>
-                    <DataGridTextColumn Header="Значение" Width="*" Binding="{Binding Path=Value, StringFormat=N2}"/>
-                </DataGrid.Columns>
-            </DataGrid>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Название звена" Width="200" Binding="{Binding Path=Name}"/>
+                        <DataGridTextColumn Header="Значение" Width="*" Binding="{Binding Path=Value, StringFormat=N2}"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
         </Border>
-        <Border BorderBrush="Black" BorderThickness="1" Grid.RowSpan="2" Grid.Column="1" Margin="10">
-            <ScrollViewer>
-                <TextBlock x:Name="TextDebug" TextWrapping="Wrap"/>
-            </ScrollViewer>
+        
+        <Border BorderBrush="Black" BorderThickness="1" Grid.RowSpan="4" Grid.Column="1" Margin="5">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Label Grid.Row="0" Content="Лог программы" Style="{DynamicResource LabelStyleSectionTitle}"/>
+                <ScrollViewer Grid.Row="1" Margin="0 0 0 1">
+                    <TextBlock x:Name="TextDebug" TextWrapping="Wrap" Padding="5"/>
+                </ScrollViewer>
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="1" Grid.Column="0" BorderBrush="Black" BorderThickness="1" Margin="5">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Label x:Name="LabelCostumeTitle" Grid.Row="0" Content="Костюм" Style="{DynamicResource LabelStyleSectionTitle}"/>
+                <Label x:Name="LabelCostumeIP" Grid.Row="1" Content="IP:"/>
+                <Label x:Name="LabelCostumeStatus" Grid.Row="2" Content="Состояние:"/>
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="2" Grid.Column="0" BorderBrush="Black" BorderThickness="1" Margin="5">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Label x:Name="LabelRobotTitle" Grid.Row="0" Content="Робот" Style="{DynamicResource LabelStyleSectionTitle}"/>
+                <Label x:Name="LabelRobotIP" Grid.Row="1" Content="IP:"/>
+                <Label x:Name="LabelRobotStatus" Grid.Row="2" Content="Состояние:"/>
+            </Grid>
+        </Border>
+        <Border Grid.Row="3" Grid.Column="0" BorderBrush="Black" BorderThickness="1" Margin="5">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Label x:Name="LabelRecordTitle" Grid.Row="0" Content="Запись" Style="{DynamicResource LabelStyleSectionTitle}"/>
+                <Label x:Name="LabelRecordFile" Grid.Row="1" Content="Путь:"/>
+                <Label x:Name="LabelRecordStatus" Grid.Row="2" Content="Состояние:"/>
+            </Grid>
         </Border>
     </Grid>
 </Window>

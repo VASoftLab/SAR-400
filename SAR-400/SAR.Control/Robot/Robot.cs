@@ -122,7 +122,7 @@ namespace SAR.Control.Robot
                 command.Append(":GO:");
                 foreach (CostumeJoint joint in joints)
                     command.Append($"{joint.Value.ToString(_ci)};");
-
+                
                 float seconds = (float)time.TotalSeconds;
 
                 int miliseconds = Convert.ToInt32(Math.Ceiling(time.TotalMilliseconds));
