@@ -49,10 +49,13 @@ namespace CostumeRecorder
         {
             try
             {
-                string _logLine = $"[{DateTime.Now.ToString("dd.MM.YYYY HH:mm:ss")}] {msg}{Environment.NewLine}";
+                // Сформировать строчку лога
+                string _logLine = $"[{DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss")}] {msg}{Environment.NewLine}";
 
-                Display.Text += _logLine;
+                // Вывести на экран в начале текста
+                Display.Text = Display.Text.Insert(0, _logLine);
                 
+                // При необходимости сохранить в файл
                 if (RecordToFile)
                 {
                     using (StreamWriter wr = new StreamWriter(FileName, true))
