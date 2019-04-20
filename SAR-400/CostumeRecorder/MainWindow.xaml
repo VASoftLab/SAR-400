@@ -27,13 +27,13 @@
                 </Grid.RowDefinitions>
                 <Label Grid.Row="0" Content="Панель управления" Style="{DynamicResource LabelStyleSectionTitle}"/>
                 <StackPanel Grid.Row="1" Orientation="Vertical">
-                    <Button x:Name="ButtonConfig" Height="20" Margin="5" Content="Задать файл настроек" Click="ButtonConfig_Click"/>
-                    <Button x:Name="ButtonConnect" Height="20" Margin="5" Content="Подключиться" Click="ButtonConnect_Click"/>
-                    <Button x:Name="ButtonStartRecording" Height="20" Margin="5" Content="Начать запись" Click="ButtonStartRecording_Click"/>
-                    <Button x:Name="ButtonStopRecording" Height="20" Margin="5" Content="Остановить запись" Click="ButtonStopRecording_Click"/>
-                    <Button x:Name="ButtonLoadRecord" Height="20" Margin="5" Content="Загрузить запись" Click="ButtonLoadRecord_Click"/>
-                    <Button x:Name="ButtonPlayRecord" Height="20" Margin="5" Content="Воспроизвести запись" Click="ButtonPlayRecord_Click"/>
-                    <Button x:Name="ButtonPlayTestMessage" Height="20" Margin="5" Content="Воспроизвести запись" Click="ButtonPlayTestMessage_Click"/>
+                    <Button x:Name="ButtonConfig" Content="Задать файл настроек костюма" Style="{DynamicResource ButtonStyleMenu}" Click="ButtonConfig_Click"/>
+                    <Button x:Name="ButtonConnect" Content="Подключиться" Style="{DynamicResource ButtonStyleMenu}" Click="ButtonConnect_Click"/>
+                    <Button x:Name="ButtonStartRecording" Content="Начать запись" Style="{DynamicResource ButtonStyleMenu}" Click="ButtonStartRecording_Click"/>
+                    <Button x:Name="ButtonStopRecording" Content="Остановить запись" Style="{DynamicResource ButtonStyleMenu}" Click="ButtonStopRecording_Click"/>
+                    <Button x:Name="ButtonLoadRecord" Content="Загрузить запись" Style="{DynamicResource ButtonStyleMenu}" Click="ButtonLoadRecord_Click"/>
+                    <Button x:Name="ButtonPlayRecord" Content="Воспроизвести запись" Style="{DynamicResource ButtonStyleMenu}" Click="ButtonPlayRecord_Click"/>
+                    <Button x:Name="ButtonPlayTestMessage" Content="Тестовый лог" Style="{DynamicResource ButtonStyleMenu}" Click="ButtonPlayTestMessage_Click"/>
                 </StackPanel>
             </Grid>
         </Border>
