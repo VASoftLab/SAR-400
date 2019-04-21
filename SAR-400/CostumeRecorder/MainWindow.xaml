@@ -28,13 +28,16 @@
                 <Label Grid.Row="0" Content="Панель управления" Style="{DynamicResource LabelStyleSectionTitle}"/>
                 <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
                     <StackPanel Orientation="Vertical">
-                        <Button x:Name="ButtonConfig" Content="Загрузить настройки костюма из файла" Style="{DynamicResource ButtonStyleMenu}" Click="ButtonConfig_Click"/>
-                        <Button x:Name="ButtonConnect" Content="Подключиться к костюму" Style="{DynamicResource ButtonStyleMenu}" Click="ButtonConnect_Click"/>
+                        <Label Content="Костюм"/>
+                        <Button x:Name="ButtonConfig" Content="Загрузить настройки из файла" Style="{DynamicResource ButtonStyleMenu}" Click="ButtonConfig_Click"/>
+                        <Button x:Name="ButtonConnectCostume" Content="Подключиться" Style="{DynamicResource ButtonStyleMenu}" Click="ButtonConnectCostume_Click"/>
+                        <Label Content="Робот"/>
+                        <Button x:Name="ButtonRobotConnect" Content="Подключиться" Style="{DynamicResource ButtonStyleMenu}" Click="ButtonRobotConnect_Click"/>
+                        <Label Content="Запись"/>
                         <Button x:Name="ButtonStartRecording" Content="Начать запись" Style="{DynamicResource ButtonStyleMenu}" Click="ButtonStartRecording_Click"/>
-                        <Button x:Name="ButtonStopRecording" Content="Остановить запись" Style="{DynamicResource ButtonStyleMenu}" Click="ButtonStopRecording_Click"/>
+                        <Button x:Name="ButtonStopRecording" Content="Остановить запись" Style="{DynamicResource ButtonStyleMenu}" Click="ButtonStopRecording_Click" Visibility="Collapsed"/>
                         <Button x:Name="ButtonLoadRecord" Content="Загрузить запись" Style="{DynamicResource ButtonStyleMenu}" Click="ButtonLoadRecord_Click"/>
                         <Button x:Name="ButtonPlayRecord" Content="Воспроизвести запись" Style="{DynamicResource ButtonStyleMenu}" Click="ButtonPlayRecord_Click"/>
-                        <Button x:Name="ButtonPlayTestMessage" Content="Тестовый лог" Style="{DynamicResource ButtonStyleMenu}" Click="ButtonPlayTestMessage_Click"/>
                     </StackPanel>
                 </ScrollViewer>
             </Grid>
@@ -80,7 +83,7 @@
                 </Grid.RowDefinitions>
                 <Label x:Name="LabelCostumeTitle" Grid.Row="0" Content="Костюм" Style="{DynamicResource LabelStyleSectionTitle}"/>
                 <Label x:Name="LabelCostumeIP" Grid.Row="1" Content="IP:"/>
-                <Label x:Name="LabelCostumeStatus" Grid.Row="2" Content="Состояние:"/>
+                <Label x:Name="LabelCostumeStatus" Grid.Row="2" Content="Состояние: Отслеживание не ведётся"/>
             </Grid>
         </Border>
 
@@ -93,7 +96,7 @@
                 </Grid.RowDefinitions>
                 <Label x:Name="LabelRobotTitle" Grid.Row="0" Content="Робот" Style="{DynamicResource LabelStyleSectionTitle}"/>
                 <Label x:Name="LabelRobotIP" Grid.Row="1" Content="IP:"/>
-                <Label x:Name="LabelRobotStatus" Grid.Row="2" Content="Состояние:"/>
+                <Label x:Name="LabelRobotStatus" Grid.Row="2" Content="Состояние: Отключен"/>
             </Grid>
         </Border>
         <Border Grid.Row="3" Grid.Column="0" BorderBrush="Black" BorderThickness="1" Margin="5">
@@ -105,7 +108,7 @@
                 </Grid.RowDefinitions>
                 <Label x:Name="LabelRecordTitle" Grid.Row="0" Content="Запись" Style="{DynamicResource LabelStyleSectionTitle}"/>
                 <Label x:Name="LabelRecordFile" Grid.Row="1" Content="Путь:"/>
-                <Label x:Name="LabelRecordStatus" Grid.Row="2" Content="Состояние:"/>
+                <Label x:Name="LabelRecordStatus" Grid.Row="2" Content="Состояние: Отсутствует"/>
             </Grid>
         </Border>
     </Grid>

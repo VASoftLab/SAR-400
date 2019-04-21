@@ -47,9 +47,14 @@ namespace CostumeRecorder
         {
             InitializeComponent();
 
-            Costume = new Costume();
-            Robot = new Robot();
             AppLog = new Log(TextDebug, "Session.Log", true);
+
+            Costume = new Costume();
+
+            Robot = new Robot();
+            Robot.ErrorOccured += (msg) => {
+                AppLog.Write(msg);
+            };
 
             timerGUI.Elapsed += UpdateGUI;
         }
@@ -90,9 +95,11 @@ namespace CostumeRecorder
             }
 
             DataGridJoints.ItemsSource = Costume.Joints;
+            LabelCostumeIP.Content = $"IP: {Costume.Address}";
+            LabelCostumeStatus.Content = $"Состояние: Готов к отслеживанию движений";
         }
 
-        private void ButtonConnect_Click(object sender, RoutedEventArgs e)
+        private void ButtonConnectCostume_Click(object sender, RoutedEventArgs e)
         {
             if (Costume.Connect())
             {
@@ -158,26 +165,41 @@ namespace CostumeRecorder
                     sw.Stop();
                 }
             });
+            ButtonStartRecording.Visibility = Visibility.Collapsed;
+            ButtonStopRecording.Visibility = Visibility.Visible;
         }
 
         private void ButtonStopRecording_Click(object sender, RoutedEventArgs e)
         {
             recording = false;
+
+            ButtonStartRecording.Visibility = Visibility.Visible;
+            ButtonStopRecording.Visibility = Visibility.Collapsed;
         }
 
         private void ButtonLoadRecord_Click(object sender, RoutedEventArgs e)
         {
-            Recorder _recorder = new Recorder();
-            string path = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\lar_1_0.5s.csv";
-            try
+            string path = string.Empty;
+            Microsoft.Win32.OpenFileDialog opf = new Microsoft.Win32.OpenFileDialog();
+
+            Nullable<bool> result = opf.ShowDialog();
+
+            if (result == true)
             {
-                commands = _recorder.ReadFromFile(path);
-                TextDebug.Text += $"Загружено успешно" + Environment.NewLine;
-            }
-            catch(Exception E)
-            {
-                commands = null;
-                MessageBox.Show(E.Message);
+                path = opf.FileName;
+
+                Recorder _recorder = new Recorder();
+
+                try
+                {
+                    commands = _recorder.ReadFromFile(path);
+                    AppLog.Write($"Запись загружена. Количетсво команд в записи: {commands.Count}.");
+                }
+                catch (Exception E)
+                {
+                    commands = null;
+                    AppLog.Write($"Не удалось загрузить запись. Причина: {E.Message}.");
+                }
             }
         }
 
@@ -185,27 +207,20 @@ namespace CostumeRecorder
         {
             if (commands == null)
             {
-                MessageBox.Show("Не загружен список команд для робота!");
+                AppLog.Write("Невозможно воспроизвести запись. Не загружен список команд для робота.");
                 return;
             }
 
-            Robot robot = new Robot();
-            robot.ErrorOccured +=(msg) => {
-                TextDebug.Text += msg + Environment.NewLine;
-            };
-
-            if (!robot.Connect())
+            if (!Robot.Connected)
             {
-                MessageBox.Show("Не удалось установить подключение к роботу");
+                AppLog.Write("Невозможно воспроизвести запись. Отсутствует соединение с роботом.");
                 return;
             }
 
             foreach (RecorderCommand command in commands)
             {
-                RobotAnswer answer = robot.ExecuteCommand(command.Joints,command.Duration);
-                TextDebug.Text += answer.ToString() + Environment.NewLine;
-                //int duration = (int)Math.Ceiling(command.Duration.TotalMilliseconds);
-                //System.Threading.Thread.Sleep(duration);
+                RobotAnswer answer = Robot.ExecuteCommand(command.Joints,command.Duration);
+                AppLog.Write(answer.ToString());
             }
 
         }
@@ -213,6 +228,19 @@ namespace CostumeRecorder
         private void ButtonPlayTestMessage_Click(object sender, RoutedEventArgs e)
         {
             AppLog.Write("Тестовое сообщение");
+        }
+
+        private void ButtonRobotConnect_Click(object sender, RoutedEventArgs e)
+        {
+            if (Robot.Connect())
+            {
+                AppLog.Write("Соединение с роботом установлено.");
+                return;
+            }
+            else
+            {
+                AppLog.Write("Не удалось установить соединение с роботом.");
+            }
         }
     }
 }
