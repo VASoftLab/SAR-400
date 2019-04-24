@@ -55,6 +55,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Classes\AppSettings.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="UserControls\JointDisplay.xaml.cs">
       <DependentUpon>JointDisplay.xaml</DependentUpon>

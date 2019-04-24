@@ -21,6 +21,8 @@ using SAR.Control.Costume;
 using SAR.Control.Recorder;
 using SAR.Control.Robot;
 
+using CostumeRecorder.Classes;
+
 namespace CostumeRecorder
 {
     /// <summary>
@@ -28,15 +30,14 @@ namespace CostumeRecorder
     /// </summary>
     public partial class MainWindow : Window
     {
-        // Костюм
         Costume Costume;
-        string _pathToCostumeConfig = string.Empty;
-
-        // Робот
         Robot Robot;
+
+
         List<RecorderCommand> commands;
 
         bool recording = false;
+        string pathToRecord = string.Empty;
         Task RecordingTask;
 
         Log AppLog;
@@ -47,21 +48,44 @@ namespace CostumeRecorder
         {
             InitializeComponent();
 
+            // Инициализация лога программы
             AppLog = new Log(TextDebug, "Session.Log", true);
 
+            AppLog.Write("Программа запущена.");
+
+            // Инициализация костюма
             Costume = new Costume();
 
+            // Загрузка конфига костюма
+            if (File.Exists(AppSettings.CostumeConfigPath))
+                Costume.Initialize(AppSettings.CostumeConfigPath);
+
+            if (Costume.Initialized)
+            {
+                LabelCostumeIP.Content = $"IP: {Costume.Address}";
+                LabelCostumeStatus.Content = "Состояние: Готов";
+
+                DataGridJoints.ItemsSource = Costume.Joints;
+                AppLog.Write($"Настройки костюма загружены.");
+            }
+            else
+            {
+                AppLog.Write($"Не удалось загрузить настройки костюма. Проверьте файл настроек.");
+            }
+
+            
+            // Инициализация робота
             Robot = new Robot();
             Robot.ErrorOccured += (msg) => {
                 AppLog.Write(msg);
             };
 
-            timerGUI.Elapsed += UpdateGUI;
-        }
+            LabelRobotIP.Content = $"IP: {Robot.Address}";
+            LabelRobotStatus.Content = "Состояние: Не подключен";
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            AppLog.Write("Программа запущена.");
+            AppLog.Write($"Настройки робота загружены.");
+
+            timerGUI.Elapsed += UpdateGUI;
         }
 
         private void ButtonConfig_Click(object sender, RoutedEventArgs e)
@@ -72,12 +96,13 @@ namespace CostumeRecorder
 
             if (result == true)
             {
-                _pathToCostumeConfig = opf.FileName;
-                AppLog.Write($"Путь к файлу настроек костюма задан. Новый путь: {_pathToCostumeConfig}.");
+
+                AppSettings.CostumeConfigPath = opf.FileName;
+                AppLog.Write($"Путь к файлу настроек костюма задан. Новый путь: {AppSettings.CostumeConfigPath}.");
             }
 
-            if (!string.IsNullOrEmpty(_pathToCostumeConfig))
-                Costume.Initialize(_pathToCostumeConfig);
+            if (!string.IsNullOrEmpty(AppSettings.CostumeConfigPath))
+                Costume.Initialize(AppSettings.CostumeConfigPath);
             else
             {
                 AppLog.Write("Загрузка настроек костюма не выполнена. Не выбран файл настроек костюма.");
@@ -96,13 +121,14 @@ namespace CostumeRecorder
 
             DataGridJoints.ItemsSource = Costume.Joints;
             LabelCostumeIP.Content = $"IP: {Costume.Address}";
-            LabelCostumeStatus.Content = $"Состояние: Готов к отслеживанию движений";
+            LabelCostumeStatus.Content = $"Состояние: Готов";
         }
 
         private void ButtonConnectCostume_Click(object sender, RoutedEventArgs e)
         {
             if (Costume.Connect())
             {
+                LabelCostumeStatus.Content = "Состояние: Отслеживается";
                 timerGUI.Start();
                 AppLog.Write("Движения костюма остлеживаются!");
             }
@@ -126,84 +152,99 @@ namespace CostumeRecorder
                 Costume.Dispose();
         }
 
-        private void ButtonStartRecording_Click(object sender, RoutedEventArgs e)
+        private void ButtonRobotConnect_Click(object sender, RoutedEventArgs e)
+        {
+            if (Robot.Connect())
+            {
+                AppLog.Write("Соединение с роботом установлено.");
+                LabelRobotStatus.Content = "Состяние: Подключен";
+                return;
+            }
+            else
+            {
+                AppLog.Write("Не удалось установить соединение с роботом.");
+                LabelRobotStatus.Content = "Состяние: Ошибка";
+            }
+        }
+
+        private void ButtonRecordStop_Click(object sender, RoutedEventArgs e)
+        {
+            recording = false;
+        }
+
+        private void ButtonRecordStart_Click(object sender, RoutedEventArgs e)
         {
             if (RecordingTask != null)
             {
                 if (RecordingTask.Status == TaskStatus.Running)
                     return;
             }
-            
+
+            if (string.IsNullOrEmpty(pathToRecord))
+            {
+                Dispatcher.Invoke(() => { AppLog.Write("Запись двжиения невозможна. Не выбран конечный файл."); });
+                return;
+            }
+
+            AppLog.Write("Начата запись движения.");
+
             RecordingTask = Task.Factory.StartNew(() =>
             {
                 Stopwatch sw = new Stopwatch();
 
-                string path = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\test.csv";
-
-                using (StreamWriter writer = new StreamWriter(new FileStream(path, FileMode.Create)))
-                {
-                    string header = "Time;" + Costume.GetJointNames();
-                    writer.WriteLine(header);
-
-                    recording = true;
-                    sw.Start();
-                    TimeSpan lastRecordTime = new TimeSpan();
-
-                    while (recording)
-                    {
-                        TimeSpan timeSpan = sw.Elapsed;
-
-                        if ((timeSpan - lastRecordTime).TotalMilliseconds >= 100)
-                        {
-                            string record = $"{Convert.ToInt64(timeSpan.TotalMilliseconds)};" + Costume.GetCostumeSnapshot();
-                            writer.WriteLine(record);
-
-                            lastRecordTime = timeSpan;
-                        }
-                    }
-
-                    sw.Stop();
-                }
-            });
-            ButtonStartRecording.Visibility = Visibility.Collapsed;
-            ButtonStopRecording.Visibility = Visibility.Visible;
-        }
-
-        private void ButtonStopRecording_Click(object sender, RoutedEventArgs e)
-        {
-            recording = false;
-
-            ButtonStartRecording.Visibility = Visibility.Visible;
-            ButtonStopRecording.Visibility = Visibility.Collapsed;
-        }
-
-        private void ButtonLoadRecord_Click(object sender, RoutedEventArgs e)
-        {
-            string path = string.Empty;
-            Microsoft.Win32.OpenFileDialog opf = new Microsoft.Win32.OpenFileDialog();
-
-            Nullable<bool> result = opf.ShowDialog();
-
-            if (result == true)
-            {
-                path = opf.FileName;
-
-                Recorder _recorder = new Recorder();
-
                 try
                 {
-                    commands = _recorder.ReadFromFile(path);
-                    AppLog.Write($"Запись загружена. Количетсво команд в записи: {commands.Count}.");
+                    using (StreamWriter writer = new StreamWriter(new FileStream(pathToRecord, FileMode.Create)))
+                    {
+                        string header = "Time;" + Costume.GetJointNames();
+                        writer.WriteLine(header);
+
+                        recording = true;
+                        sw.Start();
+                        TimeSpan lastRecordTime = new TimeSpan();
+
+                        while (recording)
+                        {
+                            TimeSpan timeSpan = sw.Elapsed;
+
+                            if ((timeSpan - lastRecordTime).TotalMilliseconds >= 100)
+                            {
+                                try
+                                {
+                                    string record = $"{Convert.ToInt64(timeSpan.TotalMilliseconds)};" + Costume.GetCostumeSnapshot();
+                                    writer.WriteLine(record);
+
+                                    lastRecordTime = timeSpan;
+
+
+                                    Dispatcher.Invoke(() => { LabelRecordStatus.Content = $"Состояние: Идет запись. ({sw.Elapsed})"; });
+                                }
+                                catch (Exception E)
+                                {
+                                    Dispatcher.Invoke(() => { AppLog.Write($"При записи движения возникла ошибка. {E.Message}. Запись остановлена"); });
+                                    recording = false;
+                                }
+
+                            }
+                        }
+
+                        sw.Stop();
+                        Dispatcher.Invoke(() =>
+                        {
+                            LabelRecordStatus.Content = $"Состояние: Запись окончена. Длительность: {sw.Elapsed}";
+                            AppLog.Write("Запись движения окончена.");
+                        });
+                    }
                 }
-                catch (Exception E)
+                catch(Exception E)
                 {
-                    commands = null;
-                    AppLog.Write($"Не удалось загрузить запись. Причина: {E.Message}.");
+                    Dispatcher.Invoke(()=> { AppLog.Write($"При работе с записью движения возникла ошибка. {E.Message}. Запись остановлена"); });
+                    return;
                 }
-            }
+            });
         }
 
-        private void ButtonPlayRecord_Click(object sender, RoutedEventArgs e)
+        private void ButtonPlayStart_Click(object sender, RoutedEventArgs e)
         {
             if (commands == null)
             {
@@ -219,27 +260,51 @@ namespace CostumeRecorder
 
             foreach (RecorderCommand command in commands)
             {
-                RobotAnswer answer = Robot.ExecuteCommand(command.Joints,command.Duration);
+                RobotAnswer answer = Robot.ExecuteCommand(command.Joints, command.Duration);
                 AppLog.Write(answer.ToString());
             }
-
         }
 
-        private void ButtonPlayTestMessage_Click(object sender, RoutedEventArgs e)
+        private void BittonPlaySelectFile_Click(object sender, RoutedEventArgs e)
         {
-            AppLog.Write("Тестовое сообщение");
-        }
+            string path = string.Empty;
+            Microsoft.Win32.OpenFileDialog opf = new Microsoft.Win32.OpenFileDialog();
 
-        private void ButtonRobotConnect_Click(object sender, RoutedEventArgs e)
-        {
-            if (Robot.Connect())
+            Nullable<bool> result = opf.ShowDialog();
+
+            if (result == true)
             {
-                AppLog.Write("Соединение с роботом установлено.");
-                return;
+                path = opf.FileName;
+
+                Recorder _recorder = new Recorder();
+
+                try
+                {
+                    commands = _recorder.ReadFromFile(path);
+                    AppLog.Write($"Запись загружена. Количество команд в записи: {commands.Count}.");
+                }
+                catch (Exception E)
+                {
+                    commands = null;
+                    AppLog.Write($"Не удалось загрузить запись. Причина: {E.Message}.");
+                }
+
+                LabelPlayFile.Content = $"Файл: {path}";
             }
-            else
+        }
+
+        private void BittonRecordSelectFile_Click(object sender, RoutedEventArgs e)
+        {
+            Microsoft.Win32.SaveFileDialog sf = new Microsoft.Win32.SaveFileDialog();
+
+            Nullable<bool> result = sf.ShowDialog();
+
+            if (result == true)
             {
-                AppLog.Write("Не удалось установить соединение с роботом.");
+                pathToRecord = sf.FileName;
+                LabelRecordFile.Content = $"Файл: {pathToRecord}";
+                LabelRecordStatus.Content = "Состояние: Файл задан";
+                //AppLog.Write($"Путь к файлу настроек костюма задан. Новый путь: {AppSettings.CostumeConfigPath}.");
             }
         }
     }

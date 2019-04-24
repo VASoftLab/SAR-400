@@ -6,13 +6,13 @@
         xmlns:local="clr-namespace:CostumeRecorder"
         xmlns:uc="clr-namespace:CostumeRecorder.UserControls"
         mc:Ignorable="d" WindowStartupLocation="CenterScreen"
-        Title="SAR Costume Recorder" Height="650" Width="1000" Loaded="Window_Loaded" Closing="Window_Closing">
+        Title="SAR Costume Recorder" Height="650" Width="1000" Closing="Window_Closing">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="0.55*"/>
-            <RowDefinition Height="85"/>
-            <RowDefinition Height="85"/>
-            <RowDefinition Height="85"/>
+            <RowDefinition Height="0.5*"/>
+            <RowDefinition Height="90"/>
+            <RowDefinition Height="90"/>
+            <RowDefinition Height="90"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="250"/>
@@ -33,11 +33,6 @@
                         <Button x:Name="ButtonConnectCostume" Content="Подключиться" Style="{DynamicResource ButtonStyleMenu}" Click="ButtonConnectCostume_Click"/>
                         <Label Content="Робот"/>
                         <Button x:Name="ButtonRobotConnect" Content="Подключиться" Style="{DynamicResource ButtonStyleMenu}" Click="ButtonRobotConnect_Click"/>
-                        <Label Content="Запись"/>
-                        <Button x:Name="ButtonStartRecording" Content="Начать запись" Style="{DynamicResource ButtonStyleMenu}" Click="ButtonStartRecording_Click"/>
-                        <Button x:Name="ButtonStopRecording" Content="Остановить запись" Style="{DynamicResource ButtonStyleMenu}" Click="ButtonStopRecording_Click" Visibility="Collapsed"/>
-                        <Button x:Name="ButtonLoadRecord" Content="Загрузить запись" Style="{DynamicResource ButtonStyleMenu}" Click="ButtonLoadRecord_Click"/>
-                        <Button x:Name="ButtonPlayRecord" Content="Воспроизвести запись" Style="{DynamicResource ButtonStyleMenu}" Click="ButtonPlayRecord_Click"/>
                     </StackPanel>
                 </ScrollViewer>
             </Grid>
@@ -52,7 +47,8 @@
                 <Label Grid.Row="0" Content="Текущее состояние костюма" Style="{DynamicResource LabelStyleSectionTitle}"/>
                 <DataGrid x:Name="DataGridJoints" Grid.Row="1" AutoGenerateColumns="False" BorderThickness="0"
                       CanUserAddRows="False" CanUserResizeRows="False" CanUserReorderColumns="False" CanUserSortColumns="False"
-                      CanUserDeleteRows="False" CanUserResizeColumns="False" HorizontalScrollBarVisibility="Disabled">
+                      CanUserDeleteRows="False" CanUserResizeColumns="False" HorizontalScrollBarVisibility="Disabled"
+                          IsReadOnly="True" SelectionMode="Single" SelectionUnit="FullRow" RowHeaderWidth="0">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Название звена" Width="200" Binding="{Binding Path=Name}"/>
                         <DataGridTextColumn Header="Значение" Width="*" Binding="{Binding Path=Value, StringFormat=N2}"/>
@@ -61,7 +57,7 @@
             </Grid>
         </Border>
         
-        <Border BorderBrush="Black" BorderThickness="1" Grid.RowSpan="4" Grid.Column="1" Margin="5">
+        <Border BorderBrush="Black" BorderThickness="1" Grid.RowSpan="3" Grid.Column="1" Margin="5">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="25"/>
@@ -82,8 +78,8 @@
                     <RowDefinition/>
                 </Grid.RowDefinitions>
                 <Label x:Name="LabelCostumeTitle" Grid.Row="0" Content="Костюм" Style="{DynamicResource LabelStyleSectionTitle}"/>
-                <Label x:Name="LabelCostumeIP" Grid.Row="1" Content="IP:"/>
-                <Label x:Name="LabelCostumeStatus" Grid.Row="2" Content="Состояние: Отслеживание не ведётся"/>
+                <Label x:Name="LabelCostumeIP" Grid.Row="1" Content="IP:" Style="{DynamicResource LabelStyleSectionContent}"/>
+                <Label x:Name="LabelCostumeStatus" Grid.Row="2" Content="Состояние:" Style="{DynamicResource LabelStyleSectionContent}"/>
             </Grid>
         </Border>
 
@@ -95,8 +91,8 @@
                     <RowDefinition/>
                 </Grid.RowDefinitions>
                 <Label x:Name="LabelRobotTitle" Grid.Row="0" Content="Робот" Style="{DynamicResource LabelStyleSectionTitle}"/>
-                <Label x:Name="LabelRobotIP" Grid.Row="1" Content="IP:"/>
-                <Label x:Name="LabelRobotStatus" Grid.Row="2" Content="Состояние: Отключен"/>
+                <Label x:Name="LabelRobotIP" Grid.Row="1" Content="IP:" Style="{DynamicResource LabelStyleSectionContent}"/>
+                <Label x:Name="LabelRobotStatus" Grid.Row="2" Content="Состояние:" Style="{DynamicResource LabelStyleSectionContent}"/>
             </Grid>
         </Border>
         <Border Grid.Row="3" Grid.Column="0" BorderBrush="Black" BorderThickness="1" Margin="5">
@@ -106,9 +102,38 @@
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <Label x:Name="LabelRecordTitle" Grid.Row="0" Content="Запись" Style="{DynamicResource LabelStyleSectionTitle}"/>
-                <Label x:Name="LabelRecordFile" Grid.Row="1" Content="Путь:"/>
-                <Label x:Name="LabelRecordStatus" Grid.Row="2" Content="Состояние: Отсутствует"/>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="50"/>
+                </Grid.ColumnDefinitions>
+                <Label x:Name="LabelPlayTitle" Grid.Row="0" Grid.ColumnSpan="2" Content="Воспроизведение" Style="{DynamicResource LabelStyleSectionTitle}"/>
+                
+                <Label x:Name="LabelPlayFile" Grid.Row="1" Grid.Column="0" Content="Файл:" Style="{DynamicResource LabelStyleSectionContent}"/>
+                <Button x:Name="BittonPlaySelectFile" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" Width="20" Margin="5" Content="..." Click="BittonPlaySelectFile_Click"/>
+                
+                <Label x:Name="LabelPlayStatus" Grid.Row="2" Content="Состояние: Файл не выбран" Style="{DynamicResource LabelStyleSectionContent}"/>
+                <Button x:Name="ButtonPlayStart" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Right" Margin="5" Content="P" Padding="0" Width="20" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="ButtonPlayStart_Click"/>
+            </Grid>
+        </Border>
+        <Border Grid.Row="3" Grid.Column="1" BorderBrush="Black" BorderThickness="1" Margin="5">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="100"/>
+                </Grid.ColumnDefinitions>
+                <Label x:Name="LabelRecordTitle" Grid.Row="0" Grid.ColumnSpan="2" Content="Запись" Style="{DynamicResource LabelStyleSectionTitle}"/>
+
+                <Label x:Name="LabelRecordFile" Grid.Row="1" Grid.Column="0" Content="Файл:" Style="{DynamicResource LabelStyleSectionContent}"/>
+                <Button x:Name="BittonRecordSelectFile" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" Width="20" Margin="5" Content="..." Click="BittonRecordSelectFile_Click"/>
+
+                <Label x:Name="LabelRecordStatus" Grid.Row="2" Grid.Column="0" Content="Состояние: Файл не выбран" Style="{DynamicResource LabelStyleSectionContent}"/>
+                <Button x:Name="ButtonRecordStop" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Right" Margin="5" Content="S" Padding="0" Width="20" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="ButtonRecordStop_Click"/>
+                <Button x:Name="ButtonRecordStart" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Right" Margin="5 5 30 5" Content="P" Padding="0" Width="20" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="ButtonRecordStart_Click"/>
             </Grid>
         </Border>
     </Grid>
