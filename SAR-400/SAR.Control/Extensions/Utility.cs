@@ -11,7 +11,7 @@ namespace SAR.Control.Extensions
     public static class Utility
     {
         private static readonly CultureInfo ci = new CultureInfo("en-US", false);
-
+        private static string[] exceptions = { "L.Finger.Little", "R.Finger.Little", "TorsoF", "TorsoR", "TorsoS" };
         public static int Round(float value)
         {
             return (int)Math.Round(value);
@@ -28,7 +28,22 @@ namespace SAR.Control.Extensions
             float[] result = new float[source.Count];
 
             for (int i = 0; i < source.Count; i++)
+            {
+                bool skip = false;
+                foreach (string name in exceptions)
+                {
+                    if (name == source[i].Name)
+                    {
+                        skip = true;
+                        break;
+                    }
+                }
+
+                if (skip)
+                    continue;
+
                 result[i] = source[i].Value;
+            }
 
             return result;
         }
@@ -36,9 +51,25 @@ namespace SAR.Control.Extensions
         public static string[] GetNamesArray(this List<CostumeJoint> source)
         {
             string[] result = new string[source.Count];
+            
 
             for (int i = 0; i < source.Count; i++)
+            {
+                bool skip = false;
+                foreach (string name in exceptions)
+                {
+                    if (name == source[i].Name)
+                    {
+                        skip = true;
+                        break;
+                    }
+                }
+
+                if (skip)
+                    continue;
+
                 result[i] = source[i].Name;
+            }
 
             return result;
         }

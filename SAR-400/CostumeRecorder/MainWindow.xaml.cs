@@ -140,10 +140,18 @@ namespace CostumeRecorder
 
         private void UpdateGUI(object sender, EventArgs e)
         {
-            Dispatcher.Invoke(() =>
+            try
             {
-                DataGridJoints.Items.Refresh();
-            });
+                Dispatcher.Invoke(() =>
+                {
+                    DataGridJoints.Items.Refresh();
+                });
+            }
+            catch (Exception E)
+            {
+                Dispatcher.Invoke(() => { AppLog.Write($"При работе с обновлением GUI возникла ошибка. {E.Message}"); });
+                return;
+            }
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -154,16 +162,24 @@ namespace CostumeRecorder
 
         private void ButtonRobotConnect_Click(object sender, RoutedEventArgs e)
         {
-            if (Robot.Connect())
+            try
             {
-                AppLog.Write("Соединение с роботом установлено.");
-                LabelRobotStatus.Content = "Состяние: Подключен";
-                return;
+                if (Robot.Connect())
+                {
+                    AppLog.Write("Соединение с роботом установлено.");
+                    LabelRobotStatus.Content = "Состяние: Подключен";
+                    return;
+                }
+                else
+                {
+                    AppLog.Write("Не удалось установить соединение с роботом.");
+                    LabelRobotStatus.Content = "Состяние: Ошибка";
+                }
             }
-            else
+            catch (Exception E)
             {
-                AppLog.Write("Не удалось установить соединение с роботом.");
-                LabelRobotStatus.Content = "Состяние: Ошибка";
+                Dispatcher.Invoke(() => { AppLog.Write($"При подключении к роботу возникла ошибка. {E.Message}"); });
+                return;
             }
         }
 
@@ -226,6 +242,20 @@ namespace CostumeRecorder
                                 }
 
                             }
+                        }
+
+                        // Добавить последнюю запись
+                        try
+                        {
+                            string record = $"{Convert.ToInt64(TimeSpan.FromSeconds(1).TotalMilliseconds)};" + Costume.GetCostumeSnapshot();
+                            writer.WriteLine(record);
+
+                            Dispatcher.Invoke(() => { LabelRecordStatus.Content = $"Состояние: Идет запись. ({sw.Elapsed})"; });
+                        }
+                        catch (Exception E)
+                        {
+                            Dispatcher.Invoke(() => { AppLog.Write($"При записи движения возникла ошибка. {E.Message}. Запись остановлена"); });
+                            recording = false;
                         }
 
                         sw.Stop();
@@ -304,7 +334,6 @@ namespace CostumeRecorder
                 pathToRecord = sf.FileName;
                 LabelRecordFile.Content = $"Файл: {pathToRecord}";
                 LabelRecordStatus.Content = "Состояние: Файл задан";
-                //AppLog.Write($"Путь к файлу настроек костюма задан. Новый путь: {AppSettings.CostumeConfigPath}.");
             }
         }
     }

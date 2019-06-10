@@ -28,10 +28,10 @@
                 <Label Grid.Row="0" Content="Панель управления" Style="{DynamicResource LabelStyleSectionTitle}"/>
                 <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
                     <StackPanel Orientation="Vertical">
-                        <Label Content="Костюм"/>
+                        <Label Content="Костюм" HorizontalContentAlignment="Center"/>
                         <Button x:Name="ButtonConfig" Content="Загрузить настройки из файла" Style="{DynamicResource ButtonStyleMenu}" Click="ButtonConfig_Click"/>
                         <Button x:Name="ButtonConnectCostume" Content="Подключиться" Style="{DynamicResource ButtonStyleMenu}" Click="ButtonConnectCostume_Click"/>
-                        <Label Content="Робот"/>
+                        <Label Content="Робот" HorizontalContentAlignment="Center"/>
                         <Button x:Name="ButtonRobotConnect" Content="Подключиться" Style="{DynamicResource ButtonStyleMenu}" Click="ButtonRobotConnect_Click"/>
                     </StackPanel>
                 </ScrollViewer>
