@@ -1,7 +1,7 @@
 import logging
-import datetime
+
+from main.tcp_client import TcpClient
 from main.robot import Robot
-from main.client import TcpClient
 
 
 class RobotClient:
@@ -36,7 +36,7 @@ class RobotClient:
             for command in robot_commands:
                 self.client.send_data(self.prepare_command(command.command_duration, command.command_joints))
         else:
-            logging.debug('')
+            logging.debug('Couldn\'t execute commands. Connection to robot has not established')
 
     def execute(self, time_to_execute, robot_commands=[]):
         logging.debug('')

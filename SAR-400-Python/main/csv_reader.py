@@ -30,7 +30,3 @@ def convert_string_to_number(number_as_string):
         number_of_dots_in_number = number_correct_delimiter.count(".")
         return float(number_correct_delimiter.replace(".", "", number_of_dots_in_number - 1))
     raise ValueError("Could not convert. Provided number as string is not a string")
-
-
-result = parse_csv('lar_1.csv', ';')
-print('STOP')
