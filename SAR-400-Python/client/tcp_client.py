@@ -15,16 +15,13 @@ class TcpClient:
         try:
             # Send data
             # todo add logging
-            self.socket.sendall((str(command) + os.linesep).encode('ascii'))
+            encoded_command = (str(command) + os.linesep).encode('ascii')
+            self.socket.sendall(encoded_command)
 
             # Look for the response
-            amount_received = 0
-            amount_expected = len(command)
-
-            while amount_received < amount_expected:
-                data = self.socket.recv(16)
-                amount_received += len(data)
-                logging.debug('received {!r}'.format(data))
+            exit_code = self.socket.recv()
+            logging.debug('Received code {!r}'.format(exit_code))
+            return exit_code
 
         finally:
             logging.debug('closing socket')

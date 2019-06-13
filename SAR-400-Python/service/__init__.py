@@ -1,4 +1,4 @@
 import logging
 
 logging.basicConfig(level=logging.DEBUG)
-logging.debug("Init module")
+logging.debug("Init Service module")

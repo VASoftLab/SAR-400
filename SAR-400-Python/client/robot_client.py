@@ -1,7 +1,7 @@
 import logging
 
-from main.tcp_client import TcpClient
-from main.robot import Robot
+from client.tcp_client import TcpClient
+from robot.robot import Robot
 
 
 class RobotClient:
@@ -47,9 +47,9 @@ class RobotClient:
             joint_values.append(joint.joint_value)
 
         return "robot:motors:" + \
-               ";".join(joint_names) + \
-               ":go:" + \
-               ";".join(map(str, joint_values)) + \
+               "".join(joint_names) + \
+               ":" + self.robot.action + ":" + \
+               "".join(joint_values) + \
                str(command_duration)
         # todo check dimension for time
 

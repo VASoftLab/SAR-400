@@ -1,14 +1,14 @@
 import csv
 import os
 
-from main.robot_command import RobotCommand
+from robot.robot_command import RobotCommand
 
 
-def parse_csv(csvfilename, delimiter):
-    with open(os.getcwd() + '/../resources/' + csvfilename) as csvfile:
+def parse_csv(csv_filename, delimiter):
+    with open(os.getcwd() + '/resources/' + csv_filename) as csv_file:
         robot_commands = []
         previous_command_time = 0.0
-        reader = csv.DictReader(csvfile, delimiter=delimiter, quoting=csv.QUOTE_NONE)
+        reader = csv.DictReader(csv_file, delimiter=delimiter, quoting=csv.QUOTE_NONE)
         for row in reader:
             command_joints = []
             # todo handle situation whether Time csv header could be changed
