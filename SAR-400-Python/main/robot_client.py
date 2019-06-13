@@ -19,7 +19,7 @@ class RobotClient:
     def connect(self):
         if not self.connected:
             server_address = (self.robot.host, self.robot.port)
-            logging.debug('Connecting to %s port %s'.format(*server_address))
+            logging.debug('Connecting to %s port %s', server_address[0], server_address[1])
             self.client.socket.connect(server_address)
             self.connected = True
         logging.debug("Is robot connected: %s", self.connected)
@@ -38,11 +38,8 @@ class RobotClient:
         else:
             logging.debug('Couldn\'t execute commands. Connection to robot has not established')
 
-    def execute(self, time_to_execute, robot_commands=[]):
-        logging.debug('')
-        # self.connect(self)
-
-    def prepare_command(self, comand_duration, commands_joints=[]):
+    # todo check if brackets is needed
+    def prepare_command(self, command_duration, commands_joints=[]):
         joint_names = []
         joint_values = []
         for joint in commands_joints:
@@ -50,10 +47,10 @@ class RobotClient:
             joint_values.append(joint.joint_value)
 
         return "robot:motors:" + \
-               "".join(joint_names) + \
-               ":GO:" + \
-               "".join(joint_values) + \
-               str(comand_duration)
+               ";".join(joint_names) + \
+               ":go:" + \
+               ";".join(map(str, joint_values)) + \
+               str(command_duration)
         # todo check dimension for time
 
 

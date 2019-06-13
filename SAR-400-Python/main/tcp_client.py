@@ -1,8 +1,7 @@
 # todo check unused imports
-import array
+import logging
 import os
 import socket
-import logging
 
 
 class TcpClient:
@@ -16,7 +15,7 @@ class TcpClient:
         try:
             # Send data
             # todo add logging
-            self.socket.sendall(array.array('B', str(command) + os.linesep))
+            self.socket.sendall((str(command) + os.linesep).encode('ascii'))
 
             # Look for the response
             amount_received = 0

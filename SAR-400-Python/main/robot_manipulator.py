@@ -13,7 +13,7 @@ try:
     commands_to_execute = parse_csv(sys.argv[1], ';')
     robot_client = RobotClient()
     robot_client.connect()
-    robot_client.execute(commands_to_execute)
+    robot_client.execute(robot_commands=commands_to_execute)
     robot_client.disconnect()
     logging.debug("Successfully executed commands from file %s", sys.argv[1])
 except BaseException as exception:

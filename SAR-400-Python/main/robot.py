@@ -16,7 +16,8 @@ class Robot:
         config_parser = configparser.ConfigParser()
         config_parser.read(os.getcwd() + '/../resources/connection.properties')
         self.host = config_parser.get("DEFAULT", "host")
-        self.port = config_parser.get("DEFAULT", "port")
+        # todo check read property not as string
+        self.port = int(config_parser.get("DEFAULT", "port"))
         self.wait = config_parser.get("DEFAULT", "wait")
         self.cultural_info = config_parser.get("DEFAULT", "locale")
 
