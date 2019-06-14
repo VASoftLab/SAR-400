@@ -47,13 +47,11 @@ class RobotClient:
             joint_names.append(joint.joint_name)
             joint_values.append(joint.joint_value)
 
-        return "robot:motors:" + \
-               ";".join(joint_names) + \
-               ";:" + self.robot.action + ":" + \
-               ";".join(map(str, joint_values)) + \
-               ";:" + str(command_duration / 1000)
-        # todo check dimension for time
-        # todo check whether semicolon needed in the end of each group of attributes
+        command_base = "robot:motors:" + \
+                       ";".join(joint_names) + \
+                       ":" + self.robot.action + ":" + \
+                       ";".join(map(str, joint_values))
+        return command_base if self.robot.action == "POSSET" else command_base + ":" + str(command_duration / 1000)
 
 
 def __del__(self):

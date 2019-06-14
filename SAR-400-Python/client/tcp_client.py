@@ -20,8 +20,6 @@ class TcpClient:
             self.socket.sendall(encoded_command)
 
             # Look for the response
-            # Added delay before reading exit_code
-            time.sleep(3)
             exit_code = self.socket.recv(1)
             logging.debug('Received code {!r}'.format(exit_code))
             return exit_code

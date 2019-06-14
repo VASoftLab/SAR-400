@@ -15,7 +15,15 @@ def parse_csv(csv_filename, delimiter):
             current_command_time = convert_string_to_number(row.get("Time"))
             command_duration = current_command_time - previous_command_time
             for row_key in row.keys():
-                if row_key == "Time":
+                if row_key == "Time" or row_key == "TorsoS":
+                    continue
+                if row_key == "L.Finger.ThumbS":
+                    command_joints.append(
+                        RobotCommand.CommandJoint("L.Finger.ThumbR", convert_string_to_number(row.get(row_key))))
+                    continue
+                if row_key == "R.Finger.ThumbS":
+                    command_joints.append(
+                        RobotCommand.CommandJoint("R.Finger.ThumbR", convert_string_to_number(row.get(row_key))))
                     continue
                 command_joints.append(RobotCommand.CommandJoint(row_key, convert_string_to_number(row.get(row_key))))
 
