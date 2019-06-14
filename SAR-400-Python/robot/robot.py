@@ -13,7 +13,6 @@ class Robot:
         config_parser.read(os.getcwd() + '/resources/connection.properties')
         self.host = config_parser.get("DEFAULT", "host")
         self.port = int(config_parser.get("DEFAULT", "port"))
-        self.wait = config_parser.get("DEFAULT", "wait")
         self.action = config_parser.get("COMMAND", "action")
 
     def __repr__(self):

@@ -22,12 +22,13 @@ class RobotClient:
             logging.debug('Connecting to %s port %s', server_address[0], server_address[1])
             self.client.socket.connect(server_address)
             self.connected = True
-        logging.debug("Is robot connected: %s", self.connected)
+        logging.debug("[ROBOT CLIENT CONNECT] Is robot connected: %s", self.connected)
 
     def disconnect(self):
         if self.connected:
             self.client.socket.close()
-        logging.debug("Is robot connected: %s", self.connected)
+            self.connected = False
+        logging.debug("[ROBOT CLIENT DISCONNECT] Is robot connected: %s", self.connected)
 
     def execute(self, robot_commands=[]):
         self.connect()
@@ -47,11 +48,12 @@ class RobotClient:
             joint_values.append(joint.joint_value)
 
         return "robot:motors:" + \
-               "".join(joint_names) + \
-               ":" + self.robot.action + ":" + \
-               "".join(joint_values) + \
-               str(command_duration)
+               ";".join(joint_names) + \
+               ";:" + self.robot.action + ":" + \
+               ";".join(map(str, joint_values)) + \
+               ";:" + str(command_duration / 1000)
         # todo check dimension for time
+        # todo check whether semicolon needed in the end of each group of attributes
 
 
 def __del__(self):

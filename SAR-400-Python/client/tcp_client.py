@@ -1,7 +1,7 @@
-# todo check unused imports
 import logging
 import os
 import socket
+import time
 
 
 class TcpClient:
@@ -15,14 +15,17 @@ class TcpClient:
         try:
             # Send data
             # todo add logging
+            logging.debug("Sending command to robot with amount of chars %d", len(command))
             encoded_command = (str(command) + os.linesep).encode('ascii')
             self.socket.sendall(encoded_command)
 
             # Look for the response
-            exit_code = self.socket.recv()
+            # Added delay before reading exit_code
+            time.sleep(3)
+            exit_code = self.socket.recv(1)
             logging.debug('Received code {!r}'.format(exit_code))
             return exit_code
-
-        finally:
-            logging.debug('closing socket')
+        except BaseException as exception:
+            logging.debug('Error occurred during sending data through socket. Closing socket with exception %s',
+                          exception)
             self.socket.close()
