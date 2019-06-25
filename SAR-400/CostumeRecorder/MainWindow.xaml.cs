@@ -247,7 +247,7 @@ namespace CostumeRecorder
                         // Добавить последнюю запись
                         try
                         {
-                            string record = $"{Convert.ToInt64(TimeSpan.FromSeconds(1).TotalMilliseconds)};" + Costume.GetCostumeSnapshot();
+                            string record = $"{Convert.ToInt64(sw.Elapsed.TotalMilliseconds)};" + Costume.GetCostumeSnapshot();
                             writer.WriteLine(record);
 
                             Dispatcher.Invoke(() => { LabelRecordStatus.Content = $"Состояние: Идет запись. ({sw.Elapsed})"; });

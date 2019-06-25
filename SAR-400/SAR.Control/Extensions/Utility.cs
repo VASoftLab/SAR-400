@@ -25,14 +25,14 @@ namespace SAR.Control.Extensions
 
         public static float[] GetValuesArray(this List<CostumeJoint> source)
         {
-            float[] result = new float[source.Count];
+            List<float> result = new List<float>();
 
-            for (int i = 0; i < source.Count; i++)
+            foreach (CostumeJoint joint in source)
             {
                 bool skip = false;
                 foreach (string name in exceptions)
                 {
-                    if (name == source[i].Name)
+                    if (name == joint.Name)
                     {
                         skip = true;
                         break;
@@ -42,23 +42,39 @@ namespace SAR.Control.Extensions
                 if (skip)
                     continue;
 
-                result[i] = source[i].Value;
+                result.Add(joint.Value);
             }
+            //for (int i = 0; i < source.Count; i++)
+            //{
+            //    bool skip = false;
+            //    foreach (string name in exceptions)
+            //    {
+            //        if (name == source[i].Name)
+            //        {
+            //            skip = true;
+            //            break;
+            //        }
+            //    }
 
-            return result;
+            //    if (skip)
+            //        continue;
+
+                
+            //}
+
+            return result.ToArray();
         }
 
         public static string[] GetNamesArray(this List<CostumeJoint> source)
         {
-            string[] result = new string[source.Count];
-            
+            List<string> result = new List<string>();
 
-            for (int i = 0; i < source.Count; i++)
+            foreach (CostumeJoint joint in source)
             {
                 bool skip = false;
                 foreach (string name in exceptions)
                 {
-                    if (name == source[i].Name)
+                    if (name == joint.Name)
                     {
                         skip = true;
                         break;
@@ -68,10 +84,28 @@ namespace SAR.Control.Extensions
                 if (skip)
                     continue;
 
-                result[i] = source[i].Name;
+                result.Add(joint.Name);
             }
 
-            return result;
+            //for (int i = 0; i < source.Count; i++)
+            //{
+            //    bool skip = false;
+            //    foreach (string name in exceptions)
+            //    {
+            //        if (name == source[i].Name)
+            //        {
+            //            skip = true;
+            //            break;
+            //        }
+            //    }
+
+            //    if (skip)
+            //        continue;
+
+            //    result[i] = source[i].Name;
+            //}
+
+            return result.ToArray();
         }
     }
 }
