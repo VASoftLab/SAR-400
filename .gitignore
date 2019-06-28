@@ -12,3 +12,6 @@ SAR-400/SAR.Control/obj/
 SAR-400/SAR.Control/bin/
 SAR-400-Python/.idea/
 SAR-400-Python/main/__pycache__
+SAR-400/Data/Grab/en/ENRegionConverter.exe
+SAR-400/ENRegionConverter/bin/
+SAR-400/ENRegionConverter/obj/
