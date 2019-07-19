@@ -20,22 +20,18 @@ namespace SARSimulatorControl
         private TcpClient tcpClient = null;
         private NetworkStream networkStream = null;
         private StreamReader streamReader = null;
-        private bool isReset = false;
 
         public FormMain()
         {
             InitializeComponent();            
         }
 
-        private void buttonConnection_Click(object sender, EventArgs e)
+        private void Connect()
         {
-            Cursor.Current = Cursors.WaitCursor;
-            buttonConnection.Enabled = false;
-
             String IP = textBoxIP.Text;
             Int32 Port = 10099;
             Int32.TryParse(textBoxPort.Text, out Port);
-            
+
             try
             {
                 if (!isConnected)
@@ -53,7 +49,7 @@ namespace SARSimulatorControl
                         networkStream = tcpClient.GetStream();
                         streamReader = new StreamReader((Stream)networkStream);
                         isConnected = true;
-                    }                        
+                    }
                     else
                     {
                         isConnected = false;
@@ -61,20 +57,16 @@ namespace SARSimulatorControl
                             networkStream.Dispose();
                         if (streamReader != null)
                             streamReader.Dispose();
-                    }                        
+                    }
                 }
                 else
                 {
                     // DISCONNECT
-                    // TODO:
-                    // 1. Разобраться какой из методов нужно использовать для закрытия соединения
-                    // 2. Разобраться почему рвется соединение
-                    // 3. Разобраться как передавать время выполения программы
-
-                    // tcpClient.GetStream().Close();
-                    // tcpClient.Client.Disconnect(true);
-
                     tcpClient.Client.Disconnect(true);
+                    // TODO: Разобраться какой из методов нужно использовать для закрытия соединения                    
+                    // tcpClient.GetStream().Close();
+                    // vs
+                    // tcpClient.Client.Disconnect(true);
                     tcpClient.Close();
 
                     if (networkStream != null)
@@ -94,9 +86,71 @@ namespace SARSimulatorControl
                 MessageBox.Show(E.ToString());
                 isConnected = false;
             }
+        }
+
+        private void ReConnect()
+        {
+            String IP = textBoxIP.Text;
+            Int32 Port = 10099;
+            Int32.TryParse(textBoxPort.Text, out Port);
+
+            try
+            {
+                #region Disconnect
+                tcpClient.Client.Disconnect(true);
+                tcpClient.Close();
+
+                if (networkStream != null)
+                    networkStream.Dispose();
+                if (streamReader != null)
+                    streamReader.Dispose();
+                #endregion
+
+                #region Connect
+                tcpClient = new TcpClient();
+                tcpClient.Connect(IPAddress.Parse(IP), (short)Port);
+                tcpClient.Client.DontFragment = true;
+                tcpClient.NoDelay = true;
+                tcpClient.Client.NoDelay = true;
+                tcpClient.ReceiveTimeout = 5000;
+
+                if (tcpClient.Connected)
+                {
+                    networkStream = tcpClient.GetStream();
+                    streamReader = new StreamReader((Stream)networkStream);
+                    isConnected = true;
+                }
+                else
+                {
+                    isConnected = false;
+                    if (networkStream != null)
+                        networkStream.Dispose();
+                    if (streamReader != null)
+                        streamReader.Dispose();
+                }
+                #endregion
+
+                if ((tcpClient.Client != null) && (tcpClient.Connected))
+                    isConnected = true;
+                else
+                    isConnected = false;
+
+            }
+            catch (Exception E)
+            {
+                MessageBox.Show(E.ToString());
+                isConnected = false;
+            }
+        }
+
+        private void buttonConnection_Click(object sender, EventArgs e)
+        {
+            Cursor.Current = Cursors.WaitCursor;
+            buttonConnection.Enabled = false;
+
+            Connect();
 
             buttonSend.Enabled = isConnected;
-
             buttonConnection.Enabled = true;
             buttonConnection.Focus();
             
@@ -131,12 +185,12 @@ namespace SARSimulatorControl
         {
             Cursor.Current = Cursors.WaitCursor;
             buttonSend.Enabled = false;
+            String command = String.Empty;
 
             try
             {
-                String command = String.Empty;
-
                 if (checkBoxReset.Checked)
+                    // RESET Command text
                     command = "ROBOT:MOTORS:R.ShoulderF;R.Elbow:POSSET:0;0";
                 else
                     command = textBoxCommand.Text;
@@ -144,7 +198,6 @@ namespace SARSimulatorControl
                 Int32 timeInSeconds = 0;
                 Int32.TryParse(textBoxTime.Text, out timeInSeconds);
                 
-
                 TimeSpan time = TimeSpan.FromSeconds(timeInSeconds);
                 float seconds = (float)time.TotalSeconds;
                 CultureInfo cultureInfo = new CultureInfo("en-US");
@@ -157,7 +210,15 @@ namespace SARSimulatorControl
             }
             catch (Exception E)
             {
-                MessageBox.Show(E.ToString());
+                // Try to reconnect
+                // buttonConnection.PerformClick();
+                // buttonConnection.PerformClick();
+                ReConnect();
+                // Send the command again
+                byte[] bytes = Encoding.ASCII.GetBytes(command.Trim() + Environment.NewLine);
+                networkStream.Write(bytes, 0, bytes.Length);
+                RobotAnswer robotAnswer = (RobotAnswer)networkStream.ReadByte();
+                labelRobotAnswer.Text = RobotAnswerToString(robotAnswer);
             }            
 
             buttonSend.Enabled = true;

@@ -38,11 +38,11 @@
             this.statusStripStatus = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabelConnectionStatus = new System.Windows.Forms.ToolStripStatusLabel();
             this.groupBoxCommand = new System.Windows.Forms.GroupBox();
-            this.textBoxCommand = new System.Windows.Forms.TextBox();
-            this.buttonSend = new System.Windows.Forms.Button();
-            this.labelRobotAnswer = new System.Windows.Forms.Label();
-            this.textBoxTime = new System.Windows.Forms.TextBox();
             this.checkBoxReset = new System.Windows.Forms.CheckBox();
+            this.textBoxTime = new System.Windows.Forms.TextBox();
+            this.labelRobotAnswer = new System.Windows.Forms.Label();
+            this.buttonSend = new System.Windows.Forms.Button();
+            this.textBoxCommand = new System.Windows.Forms.TextBox();
             this.groupBoxConnection.SuspendLayout();
             this.statusStripStatus.SuspendLayout();
             this.groupBoxCommand.SuspendLayout();
@@ -152,14 +152,36 @@
             this.groupBoxCommand.TabStop = false;
             this.groupBoxCommand.Text = "Command";
             // 
-            // textBoxCommand
+            // checkBoxReset
             // 
-            this.textBoxCommand.Location = new System.Drawing.Point(16, 31);
-            this.textBoxCommand.Name = "textBoxCommand";
-            this.textBoxCommand.Size = new System.Drawing.Size(406, 22);
-            this.textBoxCommand.TabIndex = 0;
-            this.textBoxCommand.TabStop = false;
-            this.textBoxCommand.Text = "ROBOT:MOTORS:R.ShoulderF;R.Elbow:POSSET:-45;-90";
+            this.checkBoxReset.AutoSize = true;
+            this.checkBoxReset.Location = new System.Drawing.Point(295, 63);
+            this.checkBoxReset.Name = "checkBoxReset";
+            this.checkBoxReset.Size = new System.Drawing.Size(63, 20);
+            this.checkBoxReset.TabIndex = 4;
+            this.checkBoxReset.Text = "Reset";
+            this.checkBoxReset.UseVisualStyleBackColor = true;
+            // 
+            // textBoxTime
+            // 
+            this.textBoxTime.Enabled = false;
+            this.textBoxTime.Location = new System.Drawing.Point(428, 31);
+            this.textBoxTime.Name = "textBoxTime";
+            this.textBoxTime.Size = new System.Drawing.Size(39, 22);
+            this.textBoxTime.TabIndex = 3;
+            this.textBoxTime.TabStop = false;
+            this.textBoxTime.Text = "10";
+            this.textBoxTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // labelRobotAnswer
+            // 
+            this.labelRobotAnswer.AutoSize = true;
+            this.labelRobotAnswer.ForeColor = System.Drawing.Color.Gray;
+            this.labelRobotAnswer.Location = new System.Drawing.Point(16, 59);
+            this.labelRobotAnswer.Name = "labelRobotAnswer";
+            this.labelRobotAnswer.Size = new System.Drawing.Size(17, 16);
+            this.labelRobotAnswer.TabIndex = 2;
+            this.labelRobotAnswer.Text = "...";
             // 
             // buttonSend
             // 
@@ -172,35 +194,14 @@
             this.buttonSend.UseVisualStyleBackColor = true;
             this.buttonSend.Click += new System.EventHandler(this.buttonSend_Click);
             // 
-            // labelRobotAnswer
+            // textBoxCommand
             // 
-            this.labelRobotAnswer.AutoSize = true;
-            this.labelRobotAnswer.ForeColor = System.Drawing.Color.Gray;
-            this.labelRobotAnswer.Location = new System.Drawing.Point(16, 59);
-            this.labelRobotAnswer.Name = "labelRobotAnswer";
-            this.labelRobotAnswer.Size = new System.Drawing.Size(17, 16);
-            this.labelRobotAnswer.TabIndex = 2;
-            this.labelRobotAnswer.Text = "...";
-            // 
-            // textBoxTime
-            // 
-            this.textBoxTime.Location = new System.Drawing.Point(428, 31);
-            this.textBoxTime.Name = "textBoxTime";
-            this.textBoxTime.Size = new System.Drawing.Size(39, 22);
-            this.textBoxTime.TabIndex = 3;
-            this.textBoxTime.TabStop = false;
-            this.textBoxTime.Text = "10";
-            this.textBoxTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // checkBoxReset
-            // 
-            this.checkBoxReset.AutoSize = true;
-            this.checkBoxReset.Location = new System.Drawing.Point(295, 63);
-            this.checkBoxReset.Name = "checkBoxReset";
-            this.checkBoxReset.Size = new System.Drawing.Size(63, 20);
-            this.checkBoxReset.TabIndex = 4;
-            this.checkBoxReset.Text = "Reset";
-            this.checkBoxReset.UseVisualStyleBackColor = true;
+            this.textBoxCommand.Location = new System.Drawing.Point(16, 31);
+            this.textBoxCommand.Name = "textBoxCommand";
+            this.textBoxCommand.Size = new System.Drawing.Size(406, 22);
+            this.textBoxCommand.TabIndex = 0;
+            this.textBoxCommand.TabStop = false;
+            this.textBoxCommand.Text = "ROBOT:MOTORS:R.ShoulderF;R.Elbow:POSSET:-45;-90";
             // 
             // FormMain
             // 
