@@ -19,7 +19,7 @@ namespace SAR.Control.Recorder
                 using (StreamReader reader = new StreamReader(new FileStream(path, FileMode.Open)))
                 {
                     string[] header;
-                    string[] record;
+
                     try
                     {
                         header = reader.ReadLine().Split(';');
@@ -33,6 +33,8 @@ namespace SAR.Control.Recorder
 
                     while (reader.Peek() >= 0)
                     {
+                        string[] record;
+
                         try
                         {
                             record = reader.ReadLine().Split(';');
