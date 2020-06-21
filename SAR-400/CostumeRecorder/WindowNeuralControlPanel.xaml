@@ -1,0 +1,43 @@
+﻿<Window x:Class="CostumeRecorder.WindowNeuralControlPanel"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CostumeRecorder"
+        mc:Ignorable="d"
+        Title="Панель управления" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Label Grid.ColumnSpan="3" HorizontalContentAlignment="Center" Content="Матрица вращения R"/>
+        <Label Grid.Column="3" HorizontalContentAlignment="Center" Content="Вектор положения p"/>
+        <TextBox x:Name="tbR1" Grid.Row="1" Grid.Column="0" Margin="0"/>
+        <TextBox x:Name="tbR2" Grid.Row="1" Grid.Column="1" Margin="0"/>
+        <TextBox x:Name="tbR3" Grid.Row="1" Grid.Column="2" Margin="0"/>
+        <TextBox x:Name="tbR4" Grid.Row="2" Grid.Column="0" Margin="0"/>
+        <TextBox x:Name="tbR5" Grid.Row="2" Grid.Column="1" Margin="0"/>
+        <TextBox x:Name="tbR6" Grid.Row="2" Grid.Column="2" Margin="0"/>
+        <TextBox x:Name="tbR7" Grid.Row="3" Grid.Column="0" Margin="0"/>
+        <TextBox x:Name="tbR8" Grid.Row="3" Grid.Column="1" Margin="0"/>
+        <TextBox x:Name="tbR9" Grid.Row="3" Grid.Column="2" Margin="0"/>
+
+        <TextBox x:Name="tbP1" Grid.Row="1" Grid.Column="4" Margin="0"/>
+        <TextBox x:Name="tbP2" Grid.Row="2" Grid.Column="4" Margin="0"/>
+        <TextBox x:Name="tbP3" Grid.Row="3" Grid.Column="4" Margin="0"/>
+
+        <Button Grid.Row="4" Grid.Column="2" Margin="5" x:Name="btOK" Content="Начать управление" Click="btOK_Click"/>
+        <Button Grid.Row="4" Grid.Column="3" Margin="5" x:Name="btCancel" Content="Отмена" Click="btCancel_Click"/>
+    </Grid>
+</Window>

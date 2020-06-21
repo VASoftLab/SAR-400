@@ -23,6 +23,9 @@ using SAR.Control.Robot;
 
 using CostumeRecorder.Classes;
 
+using SARNeuralLibrary;
+using MathWorks.MATLAB.NET.Arrays;
+
 namespace CostumeRecorder
 {
     /// <summary>
@@ -334,6 +337,38 @@ namespace CostumeRecorder
                 pathToRecord = sf.FileName;
                 LabelRecordFile.Content = $"Файл: {pathToRecord}";
                 LabelRecordStatus.Content = "Состояние: Файл задан";
+            }
+        }
+
+        private void ButtonNeuralOpenPanel_Click(object sender, RoutedEventArgs e)
+        {
+            WindowNeuralControlPanel wnd = new WindowNeuralControlPanel();
+
+            wnd.Show();
+
+            if (wnd.DialogResult == true)
+            {
+                SARNeural neural = new SARNeural();
+                MWArray output = neural.Predict(wnd.X1, wnd.X2, wnd.X3, wnd.X4, wnd.X5, wnd.X6, wnd.X7, wnd.X8, wnd.X9, wnd.X10, wnd.X11, wnd.X12);
+                double[,] values = (double[,])((MWNumericArray)output).ToArray(MWArrayComponent.Real);
+
+
+                RecorderCommand command = new RecorderCommand
+                {
+                    Duration = TimeSpan.FromSeconds(2.0),
+                    Joints = new List<CostumeJoint>
+                    {
+                        new CostumeJoint() { Name = "R.ShoulderF", Value = (float)values[0, 0] },
+                        new CostumeJoint() { Name = "R.ShoulderS", Value = (float)values[0, 1] },
+                        new CostumeJoint() { Name = "R.ElbowR", Value = (float)values[0, 2] },
+                        new CostumeJoint() { Name = "R.Elbow", Value = (float)values[0, 3] },
+                        new CostumeJoint() { Name = "R.WristR", Value = (float)values[0, 4] },
+                        new CostumeJoint() { Name = "R.WritsS", Value = (float)values[0, 5] }
+                    }
+                };
+
+                RobotAnswer answer = Robot.ExecuteCommand(command.Joints, command.Duration);
+                AppLog.Write(answer.ToString());
             }
         }
     }

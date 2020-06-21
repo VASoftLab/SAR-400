@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:CostumeRecorder"
         xmlns:uc="clr-namespace:CostumeRecorder.UserControls"
         mc:Ignorable="d" WindowStartupLocation="CenterScreen"
-        Title="SAR Costume Recorder" Height="650" Width="1000" Closing="Window_Closing">
+        Title="SAR Control" Height="650" Width="1000" Closing="Window_Closing">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="0.5*"/>
@@ -38,7 +38,7 @@
             </Grid>
         </Border>
 
-        <Border Grid.Row="0" Grid.Column="2" Grid.RowSpan="4" BorderBrush="Black" BorderThickness="1" Margin="5">
+        <Border Grid.Row="0" Grid.Column="2" Grid.RowSpan="3" BorderBrush="Black" BorderThickness="1" Margin="5">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="25"/>
@@ -134,6 +134,22 @@
                 <Label x:Name="LabelRecordStatus" Grid.Row="2" Grid.Column="0" Content="Состояние: Файл не выбран" Style="{DynamicResource LabelStyleSectionContent}"/>
                 <Button x:Name="ButtonRecordStop" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Right" Margin="5" Content="S" Padding="0" Width="20" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="ButtonRecordStop_Click"/>
                 <Button x:Name="ButtonRecordStart" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Right" Margin="5 5 30 5" Content="P" Padding="0" Width="20" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Click="ButtonRecordStart_Click"/>
+            </Grid>
+        </Border>
+        <Border Grid.Row="3" Grid.Column="2" BorderBrush="Black" BorderThickness="1" Margin="5">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="100"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Row="0" Grid.ColumnSpan="2" Content="Neural Network" Style="{DynamicResource LabelStyleSectionTitle}"/>
+
+                <Button x:Name="ButtonNeuralOpenPanel" Grid.Row="1" Grid.RowSpan="2" Grid.ColumnSpan="2" Margin="5" Content="Открыть панель управления" Click="ButtonNeuralOpenPanel_Click"/>
             </Grid>
         </Border>
     </Grid>
